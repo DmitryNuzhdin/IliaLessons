@@ -36,18 +36,18 @@ public class Solution2 {
         if (root == null){
             return sum;
         }
-        return sumLeft(root.left, sum) + sumRight(root.right, sum);
+        return sumLeft(root.left) + sumRight(root.right);
     }
 
-    private int sumRight(TreeNode node, int sum) {
-        if (node == null) return sum;
-        return sumLeft(node.left, sum) + sumRight(node.right, sum);
+    private int sumRight(TreeNode node) {
+        if (node == null) return 0;
+        return sumLeft(node.left) + sumRight(node.right);
     }
 
-    private int sumLeft(TreeNode node, int sum) {
-        if (node == null) return sum;
+    private int sumLeft(TreeNode node) {
+        if (node == null) return 0;
         if (node.left == null && node.right == null) return node.val;
-        return sumLeft(node.left, sum) + sumRight(node.right, sum);
+        return sumLeft(node.left) + sumRight(node.right);
     }
 
 }

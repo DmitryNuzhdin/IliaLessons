@@ -1,10 +1,12 @@
 package project.models;
 
+import java.util.List;
+
 /**
  * @author Ilia Moskalenko
  */
-public interface Model<T> {
-    T create(T t) throws Exception;
-    T update(T t) throws Exception;
-    T getAll(T t);
+public interface Model {
+    User createUser();
+    Task createTask();
+    Task updateTask(Task task);
 }

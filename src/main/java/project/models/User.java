@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class User implements Model<User> {
+public class User {
     private int id;
     private String name;
     private String secondName;
@@ -53,18 +53,5 @@ public class User implements Model<User> {
                 ", secondName: " + secondName;
     }
 
-    @Override
-    public User create(User user) {
-        return null;
-    }
 
-    @Override
-    public User update(User user) throws Exception {
-        return null;
-    }
-
-    @Override
-    public User getAll(User user) {
-        return null;
-    }
 }

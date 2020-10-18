@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class Task implements Model<Task>{
+public class Task{
     private int id;
     private String title;
     private String fullTask;
@@ -63,18 +63,5 @@ public class Task implements Model<Task>{
                 ", solved=" + solved;
     }
 
-    @Override
-    public Task create(Task task) {
-        return null;
-    }
 
-    @Override
-    public Task update(Task task) throws Exception {
-        return null;
-    }
-
-    @Override
-    public Task getAll(Task task) {
-        return null;
-    }
 }

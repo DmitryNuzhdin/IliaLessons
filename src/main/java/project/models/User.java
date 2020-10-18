@@ -6,11 +6,11 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class User {
+public class User implements Model<User> {
     private int id;
     private String name;
     private String secondName;
-    private List<Task> tasksList;
+
 
     public User(int id, String name, String secondName) {
         this.id = id;
@@ -30,9 +30,6 @@ public class User {
         return secondName;
     }
 
-    public List<Task> getTasksList() {
-        return tasksList;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -41,13 +38,12 @@ public class User {
         User user = (User) o;
         return id == user.id &&
                 Objects.equals(name, user.name) &&
-                Objects.equals(secondName, user.secondName) &&
-                Objects.equals(tasksList, user.tasksList);
+                Objects.equals(secondName, user.secondName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, secondName, tasksList);
+        return Objects.hash(id, name, secondName);
     }
 
     @Override
@@ -55,5 +51,20 @@ public class User {
         return "User:" + id +
                 ", name: " + name  +
                 ", secondName: " + secondName;
+    }
+
+    @Override
+    public User create(User user) {
+        return null;
+    }
+
+    @Override
+    public User update(User user) throws Exception {
+        return null;
+    }
+
+    @Override
+    public User getAll(User user) {
+        return null;
     }
 }

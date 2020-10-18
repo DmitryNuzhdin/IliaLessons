@@ -5,11 +5,11 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class Task {
+public class Task implements Model<Task>{
     private int id;
-    String title;
-    String fullTask;
-    boolean solved;
+    private String title;
+    private String fullTask;
+    private boolean solved;
 
 
 
@@ -61,5 +61,20 @@ public class Task {
         return "id:" + id +
                 ", title: " + title +
                 ", solved=" + solved;
+    }
+
+    @Override
+    public Task create(Task task) {
+        return null;
+    }
+
+    @Override
+    public Task update(Task task) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Task getAll(Task task) {
+        return null;
     }
 }

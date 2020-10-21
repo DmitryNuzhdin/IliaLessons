@@ -23,7 +23,8 @@ public class ModelImpl implements Model {
 
     @Override
     public void updateTask(Task task) throws TaskNotFoundException {
-
+        if (!dataStorage.getTaskById(task.getId()).isPresent()) throw new TaskNotFoundException();
+        dataStorage.updateTask(task);
     }
 
     @Override

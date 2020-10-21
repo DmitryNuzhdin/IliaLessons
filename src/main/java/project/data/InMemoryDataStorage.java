@@ -4,6 +4,7 @@ import project.models.Task;
 import project.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class InMemoryDataStorage implements DataStorage {
     @Override
@@ -44,5 +45,10 @@ public class InMemoryDataStorage implements DataStorage {
     @Override
     public List<User> getAllUsers() {
         return null;
+    }
+
+    @Override
+    public Optional<Task> getTaskById(long taskId) {
+        return Optional.empty();
     }
 }

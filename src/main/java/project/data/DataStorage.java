@@ -11,10 +11,10 @@ import java.util.List;
 public interface DataStorage {
     void addTask(Task task);
     void updateTask(Task task);
-    void deleteTask (Task task);
+    void deleteTask (long taskId);
     List<Task> getAllActiveTask(long userId);
     List<Task> getAllTasks(long userId);
     void addUser(User user);
-    void deleteUser(User user);
+    void deleteUser(long userId);
     List<User> getAllUsers();
 }

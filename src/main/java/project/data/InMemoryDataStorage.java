@@ -5,10 +5,7 @@ import project.models.User;
 
 import java.util.List;
 
-/**
- * @author Ilia Moskalenko
- */
-public class DbDatasStorage implements DataStorage{
+public class InMemoryDataStorage implements DataStorage {
     @Override
     public void addTask(Task task) {
 
@@ -20,7 +17,7 @@ public class DbDatasStorage implements DataStorage{
     }
 
     @Override
-    public void deleteTask(Task task) {
+    public void deleteTask(long taskId) {
 
     }
 
@@ -40,7 +37,7 @@ public class DbDatasStorage implements DataStorage{
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(long userId) {
 
     }
 

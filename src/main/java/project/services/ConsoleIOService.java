@@ -1,8 +1,8 @@
 package project.services;
 
-import project.exeptions.TaskNotFoundException;
-import project.exeptions.UserExistsException;
-import project.exeptions.UserNotFoundException;
+import project.exceptions.TaskNotFoundException;
+import project.exceptions.UserExistsException;
+import project.exceptions.UserNotFoundException;
 import project.models.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,10 +15,16 @@ public class ConsoleIOService implements IOService {
         public void run() {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             try {
-                System.out.println("Введите имя: ");
-                String name = bufferedReader.readLine();
-                System.out.println("Введите фамилию: ");
-                String secondName = bufferedReader.readLine();
+                String name;
+                String secondName;
+                do {
+                    System.out.println("Введите имя: ");
+                    name = bufferedReader.readLine();
+                } while (name.trim().isEmpty());
+                do {
+                    System.out.println("Введите фамилию: ");
+                    secondName = bufferedReader.readLine();
+                } while (secondName.trim().isEmpty());
                 User user = model.createUser(new User(name, secondName));
                 label:
                 while (true) {

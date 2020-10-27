@@ -8,10 +8,7 @@ import java.util.List;
 public interface Model {
     User createUser(User user) throws UserExistsException;
     Task createTask(long userId, Task task) throws UserNotFoundException;
-    void updateTask(Task task) throws TaskNotFoundException;
+    void updateTask(long taskId) throws TaskNotFoundException;
     List<Task> getAllTasksOfUser(long userId) throws UserNotFoundException;
+    List<Task> getAllActiveTaskOfUser(long userId) throws UserNotFoundException;
 }
-
-class UserNotFoundException extends Exception{};
-class UserExistsException extends Exception{};
-class TaskNotFoundException extends Exception{};

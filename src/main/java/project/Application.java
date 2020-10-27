@@ -12,10 +12,10 @@ public class Application {
         DataStorage dataStorage = new InMemoryDataStorage();
         Model model = new ModelImpl(dataStorage);
         IOService ioService = new ConsoleIOService(model);
-        IOService ioService2 = new ConsoleIOService(model);
+     //   IOService ioService2 = new ConsoleIOService(model);
 
         ioService.start();
-        ioService2.start();
+       // ioService2.start();
 
         //contex.getAllClasses(ConsoleIOService.class).start();
 

@@ -7,19 +7,22 @@ import java.util.Objects;
  * @author Ilia Moskalenko
  */
 public class User {
-    private int id;
+    private long id;
     private String name;
     private String secondName;
 
 
-    public User(int id, String name, String secondName) {
-        this.id = id;
+    public User(String name, String secondName) {
         this.name = name;
         this.secondName = secondName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

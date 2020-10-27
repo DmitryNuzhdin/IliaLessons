@@ -13,8 +13,8 @@ public class Task{
 
 
 
-    public Task(long id, String title, String fullTask) {
-        this.id = id;
+    public Task(String title, String fullTask) {
+        id++;
         this.title = title;
         this.fullTask = fullTask;
         solved = false;
@@ -22,6 +22,10 @@ public class Task{
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -60,7 +64,8 @@ public class Task{
     public String toString() {
         return "id:" + id +
                 ", title: " + title +
-                ", solved=" + solved;
+                ", full task: " + fullTask + ",\n" +
+                "solved: " + solved + "\n";
     }
 
 

@@ -1,5 +1,9 @@
 package project.models;
 
+import project.exeptions.TaskNotFoundException;
+import project.exeptions.UserExistsException;
+import project.exeptions.UserNotFoundException;
+
 import java.util.List;
 
 /**

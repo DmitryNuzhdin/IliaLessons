@@ -1,4 +1,4 @@
-package project.models;
+package project.exeptions;
 
 public class UserNotFoundException extends Exception {
 }

@@ -59,11 +59,17 @@ public class InMemoryDataStorage implements DataStorage {
 
     @Override
     public Optional<Task> getTaskById(long taskId) {
+        if (!taskList.isEmpty()){
+            if (taskList.contains(taskList.get((int) taskId))) return Optional.of(taskList.get((int) taskId));
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<User> getUser(long userId) {
+        if (!userList.isEmpty()){
+            if (userList.contains(userList.get((int) userId))) return Optional.of(userList.get((int) userId));
+        }
         return Optional.empty();
     }
 }

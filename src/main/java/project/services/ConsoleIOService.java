@@ -1,8 +1,6 @@
 package project.services;
 
 import project.models.*;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,9 +12,9 @@ public class ConsoleIOService implements IOService {
         public void run() {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             try {
-                System.out.println("Веедите имя: ");
+                System.out.println("Введите имя: ");
                 String name = bufferedReader.readLine();
-                System.out.println("Веедите фамилию: ");
+                System.out.println("Введите фамилию: ");
                 String secondName = bufferedReader.readLine();
                 User user = model.createUser(new User(name, secondName));
                 label:
@@ -41,6 +39,7 @@ public class ConsoleIOService implements IOService {
                                 throw new TaskNotFoundException();
                             }
                             model.updateTask(id);
+                            System.out.println("Задача id: "+ id + " обновлена.");
                             break;
                         case "active":
                             if (model.getAllActiveTaskOfUser(user.getId()).isEmpty()){

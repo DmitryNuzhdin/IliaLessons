@@ -6,26 +6,24 @@ import java.util.Objects;
  * @author Ilia Moskalenko
  */
 public class Task{
-    private long id;
-    private String title;
-    private String fullTask;
+    private static long countTaskId;
+    private final long id;
+    private final String title;
+    private final String fullTask;
     private boolean solved;
 
 
 
     public Task(String title, String fullTask) {
-        id++;
+        this.id = countTaskId;
         this.title = title;
         this.fullTask = fullTask;
         solved = false;
+        countTaskId++;
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getTitle() {

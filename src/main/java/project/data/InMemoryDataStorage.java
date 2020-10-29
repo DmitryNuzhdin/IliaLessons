@@ -15,7 +15,6 @@ public class InMemoryDataStorage implements DataStorage {
     @Override
     public void addTask(Task task) {
         taskList.add(task);
-        task.setId(taskList.indexOf(task));
     }
 
     @Override
@@ -44,7 +43,6 @@ public class InMemoryDataStorage implements DataStorage {
     @Override
     public void addUser(User user) {
         userList.add(user);
-        user.setId(userList.indexOf(user));
     }
 
     @Override

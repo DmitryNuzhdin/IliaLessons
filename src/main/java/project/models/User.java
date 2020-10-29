@@ -7,22 +7,21 @@ import java.util.Objects;
  * @author Ilia Moskalenko
  */
 public class User {
-    private long id;
-    private String name;
-    private String secondName;
+    private static long countUserId;
+    private final long id;
+    private final String name;
+    private final String secondName;
 
 
     public User(String name, String secondName) {
+        this.id = countUserId;
         this.name = name;
         this.secondName = secondName;
+        countUserId++;
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

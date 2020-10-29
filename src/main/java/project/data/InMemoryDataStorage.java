@@ -48,6 +48,11 @@ public class InMemoryDataStorage implements DataStorage {
     }
 
     @Override
+    public void updateUser(long userId) {
+
+    }
+
+    @Override
     public void deleteUser(long userId) {
 
     }

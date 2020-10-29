@@ -16,6 +16,7 @@ public interface DataStorage {
     List<Task> getAllActiveTask(long userId);
     List<Task> getAllTasks(long userId);
     void addUser(User user);
+    void updateUser(long userId);
     void deleteUser(long userId);
     List<User> getAllUsers();
     Optional<Task> getTaskById(long taskId);

@@ -26,7 +26,7 @@ public class ConsoleIOService implements IOService {
                     secondName = bufferedReader.readLine();
                 } while (secondName.trim().isEmpty());
                 User user = model.createUser(new User(name, secondName));
-                label:
+
                 while (true) {
                     System.out.println("Введите \"help\" для списка команд");
                     String s = bufferedReader.readLine();
@@ -75,7 +75,7 @@ public class ConsoleIOService implements IOService {
                             break;
                         case "exit":
                             bufferedReader.close();
-                            break label;
+                            return;
                     }
                 }
             } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException e) {

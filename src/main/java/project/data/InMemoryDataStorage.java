@@ -1,10 +1,13 @@
 package project.data;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import project.models.Task;
 import project.models.User;
 
 import java.util.*;
 
+@Component
 public class InMemoryDataStorage implements DataStorage {
    // Map<Long, Map<Long,Task>> map = new HashMap<>();
     List<User> userList = new ArrayList<>();
@@ -43,8 +46,8 @@ public class InMemoryDataStorage implements DataStorage {
 
     @Override
     public void addUser(User user) {
-        userList.add(user);
-        user.setId(userList.indexOf(user));
+        User userToAdd = new User(666, user.getName(), user.getSecondName());
+        userList.add(userToAdd);
     }
 
     @Override

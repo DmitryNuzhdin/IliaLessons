@@ -11,8 +11,13 @@ public class User {
     private String name;
     private String secondName;
 
-
     public User(String name, String secondName) {
+        this.name = name;
+        this.secondName = secondName;
+    }
+
+    public User(long id, String name, String secondName) {
+        this.id = id;
         this.name = name;
         this.secondName = secondName;
     }
@@ -33,6 +38,9 @@ public class User {
         return secondName;
     }
 
+    public User withName(String name) {
+        return new User(id, name, secondName);
+    }
 
     @Override
     public boolean equals(Object o) {

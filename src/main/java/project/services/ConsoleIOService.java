@@ -1,5 +1,6 @@
 package project.services;
 
+import org.springframework.stereotype.Component;
 import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+@Component
 public class ConsoleIOService implements IOService {
     private Model model;
     private Runnable runnable = new Runnable() {

@@ -19,5 +19,7 @@ public class Application {
 
         //contex.getAllClasses(ConsoleIOService.class).start();
 
+        dataStorage.getUser(5).filter(u -> u.getName().equals("abc")).ifPresent(System.out::println);
+
     }
 }

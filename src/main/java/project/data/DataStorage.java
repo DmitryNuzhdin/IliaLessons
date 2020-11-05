@@ -1,7 +1,9 @@
 package project.data;
 
 import project.models.Task;
+import project.models.TaskData;
 import project.models.User;
+import project.models.UserData;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +12,15 @@ import java.util.Optional;
  * @author Ilia Moskalenko
  */
 public interface DataStorage {
-    void addTask(Task task);
-    void updateTask(long taskId);
-    void deleteTask (long taskId);
+    Task addTask(long userId, TaskData task);
+    Task updateTask(long taskId);
+    void deleteTask (long userId, long taskId);
     List<Task> getAllActiveTask(long userId);
     List<Task> getAllTasks(long userId);
-    void addUser(User user);
-    void updateUser(long userId);
+    User addUser(UserData user);
+    User updateUser(long userId, String name, String secondName);
     void deleteUser(long userId);
     List<User> getAllUsers();
-    Optional<Task> getTaskById(long taskId);
-    Optional<User> getUser(long userId);
+    Optional<TaskData> getTaskById(long taskId);
+    Optional<UserData> getUser(long userId);
 }

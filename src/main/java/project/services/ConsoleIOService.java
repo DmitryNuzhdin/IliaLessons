@@ -25,7 +25,8 @@ public class ConsoleIOService implements IOService {
                     System.out.println("Введите фамилию: ");
                     secondName = bufferedReader.readLine();
                 } while (secondName.trim().isEmpty());
-                User user = model.createUser(new User(name, secondName));
+                User user = model.createUser(new UserData(name, secondName));
+                System.out.println(user);
 
                 while (true) {
                     System.out.println("Введите \"help\" для списка команд");
@@ -34,22 +35,30 @@ public class ConsoleIOService implements IOService {
                     switch (s) {
                         case "create":
                             System.out.println("Введите название задачи: ");
-                            String title = bufferedReader.readLine();
+                            String title = bufferedReader.readLine().trim();
                             System.out.println("Введите задачу целиком: ");
-                            String taskText = bufferedReader.readLine();
-                            Task task = model.createTask(user.getId(), new Task(title, taskText));
+                            String taskText = bufferedReader.readLine().trim();
+                            Task task = model.createTask(user.getId(), new TaskData(title, taskText, false));
                             System.out.println("Создана задача: ");
                             System.out.println(task.toString());
                             break;
                         case "update":
-                            System.out.println("Введите id задачи которую хотите обновить: ");
-                            long id = Long.parseLong(bufferedReader.readLine());
-                            if (id>=model.getAllTasksOfUser(user.getId()).size()){
-                                throw new TaskNotFoundException();
+                            boolean ex = false;
+                            while (!ex){
+                                try {
+                                System.out.println("Введите id задачи которую хотите обновить: ");
+                                long id = Long.parseLong(bufferedReader.readLine().trim());
+                                model.updateTask(id);
+                                System.out.println("Задача id: "+ id + " обновлена.");
+                                ex = true;
+                                } catch (NumberFormatException e ){
+                                    System.err.println("Введите целое число");
+                                } /*catch (TaskNotFoundException e) {
+                                    System.err.println("Такой задачи не обнаружено");
+                                }*/
                             }
-                            model.updateTask(id);
-                            System.out.println("Задача id: "+ id + " обновлена.");
                             break;
+
                         case "active":
                             if (model.getAllActiveTaskOfUser(user.getId()).isEmpty()){
                                 System.out.println("Список активных задач пуст");

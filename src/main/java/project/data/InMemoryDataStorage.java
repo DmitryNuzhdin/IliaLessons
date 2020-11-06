@@ -1,5 +1,6 @@
 package project.data;
 
+import org.springframework.stereotype.Component;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -7,6 +8,7 @@ import project.models.UserData;
 
 import java.util.*;
 
+@Component
 public class InMemoryDataStorage implements DataStorage {
     private static long countUser;
     Map<Long, UserData> userList = new HashMap<>();

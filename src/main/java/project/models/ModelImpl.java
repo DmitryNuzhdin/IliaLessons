@@ -1,5 +1,6 @@
 package project.models;
 
+import org.springframework.stereotype.Component;
 import project.data.DataStorage;
 import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
@@ -7,6 +8,7 @@ import project.exceptions.UserNotFoundException;
 
 import java.util.List;
 
+@Component
 public class ModelImpl implements Model {
     private DataStorage dataStorage;
 

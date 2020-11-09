@@ -32,15 +32,15 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public Task updateTask(long taskId) throws TaskNotFoundException {
-        if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
-        return dataStorage.updateTask(taskId);
+    public Task updateTask(long userId, long taskId) throws TaskNotFoundException {
+        if (!dataStorage.getTaskById(userId, taskId).isPresent()) throw new TaskNotFoundException();
+        return dataStorage.updateTask(userId, taskId);
     }
 
     @Override
     public void deleteTask(long userId, long taskId) throws UserNotFoundException, TaskNotFoundException {
-        if (!dataStorage.getTaskById(userId).isPresent()) throw new UserNotFoundException();
-        if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
+        if (!dataStorage.getTaskById(userId, taskId).isPresent()) throw new UserNotFoundException();
+        if (!dataStorage.getTaskById(taskId, taskId).isPresent()) throw new TaskNotFoundException();
         dataStorage.deleteTask(userId, taskId);
     }
 

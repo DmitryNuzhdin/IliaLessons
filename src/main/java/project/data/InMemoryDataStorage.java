@@ -1,6 +1,7 @@
 package project.data;
 
 import org.springframework.stereotype.Component;
+import project.exceptions.UserNotFoundException;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -28,16 +29,18 @@ public class InMemoryDataStorage implements DataStorage {
     }
 
     @Override
-    public Task updateTask(long taskId) {
+    public Task updateTask(long userId, long taskId) {
         TaskData task = taskList.get(taskId).solvedTask(true);
         taskList.put(taskId, task);
-        usersTasksMap.put(taskId, taskList);
-        return new Task(taskId, taskList.get(taskId).getTitle(), taskList.get(taskId).getFullTaskText(), taskList.get(taskId).isSolved());
+        usersTasksMap.put(userId, taskList);
+        return new Task(taskId, taskList.get(taskId).getTitle(),
+                taskList.get(taskId).getFullTaskText(),
+                taskList.get(taskId).isSolved());
     }
 
     @Override
-    public Optional<TaskData> getTaskById(long taskId) {
-        if (!taskList.isEmpty()){
+    public Optional<TaskData> getTaskById(long userId, long taskId)  {
+        if (!taskList.isEmpty() && userList.containsKey(userId)){
             if (taskList.containsKey(taskId)) return Optional.of(taskList.get(taskId));
         }
         return Optional.empty();
@@ -81,9 +84,9 @@ public class InMemoryDataStorage implements DataStorage {
     }
 
     @Override
-    public User updateUser(long userId, String name, String secondName) {
-        userList.put(userId, userList.get(userId).update(name,secondName));
-        return new User(userId, name, secondName);
+    public User updateUser(long userId, UserData userData) {
+        userList.put(userId, userData);
+        return new User(userId, userData.getName(), userData.getSecondName());
     }
 
     @Override

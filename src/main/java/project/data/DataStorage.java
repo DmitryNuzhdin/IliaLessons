@@ -13,14 +13,14 @@ import java.util.Optional;
  */
 public interface DataStorage {
     Task addTask(long userId, TaskData task);
-    Task updateTask(long userId, long taskId);
-    void deleteTask (long userId, long taskId);
+    Task updateTask(long taskId);
+    void deleteTask (long taskId);
     List<Task> getAllActiveTask(long userId);
     List<Task> getAllTasks(long userId);
     User addUser(UserData user);
     User updateUser(long userId, UserData userData);
     void deleteUser(long userId);
     List<User> getAllUsers();
-    Optional<TaskData> getTaskById(long userId, long taskId);
+    Optional<TaskData> getTaskById(long taskId);
     Optional<UserData> getUser(long userId);
 }

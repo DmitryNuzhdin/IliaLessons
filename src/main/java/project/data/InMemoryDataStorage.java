@@ -8,14 +8,15 @@ import project.models.User;
 import project.models.UserData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryDataStorage implements DataStorage {
     private static long countUser;
-    Map<Long, UserData> userList = new HashMap<>();
+    Map<Long, User> userList = new HashMap<>();
     private static long countTask;
-    Map<Long, TaskData> taskList = new HashMap<>();
-    Map<Long, Map<Long, TaskData>> usersTasksMap = new HashMap<>();
+    Map<Long, Task> taskList = new HashMap<>();
+    Map<Long, List<Long>> usersTasksMap = new HashMap<>();
 
 
 
@@ -23,45 +24,43 @@ public class InMemoryDataStorage implements DataStorage {
     public Task addTask(long userId, TaskData task) {
         countTask++;
         taskList.put(countTask, task);
-        usersTasksMap.put(userId, taskList);
+        List<Long> usersTasks = usersTasksMap.computeIfAbsent(userId, k -> new ArrayList<>());
+        usersTasks.add(countTask);
         return new Task(countTask, task.getTitle(), task.getFullTaskText(), task.isSolved());
-
     }
 
     @Override
-    public Task updateTask(long userId, long taskId) {
-        TaskData task = taskList.get(taskId).solvedTask(true);
-        taskList.put(taskId, task);
-        usersTasksMap.put(userId, taskList);
-        return new Task(taskId, taskList.get(taskId).getTitle(),
-                taskList.get(taskId).getFullTaskText(),
-                taskList.get(taskId).isSolved());
+    public Task updateTask(long taskId) {
+        TaskData newTaskData = taskList.get(taskId).solvedTask(true);
+        taskList.put(taskId, newTaskData);
+        return new Task(taskId, newTaskData.getTitle(),
+                newTaskData.getFullTaskText(),
+                newTaskData.isSolved());
     }
 
     @Override
-    public Optional<TaskData> getTaskById(long userId, long taskId)  {
-        if (!taskList.isEmpty() && userList.containsKey(userId)){
-            if (taskList.containsKey(taskId)) return Optional.of(taskList.get(taskId));
-        }
+    public Optional<TaskData> getTaskById(long taskId)  {
+        if (taskList.containsKey(taskId)) return Optional.of(taskList.get(taskId));
         return Optional.empty();
     }
 
     @Override
-    public void deleteTask(long userId, long taskId) {
+    public void deleteTask(long taskId) {
        taskList.remove(taskId);
-       usersTasksMap.put(userId, taskList);
+       usersTasksMap.forEach((userIds, taskIds) -> taskIds.remove(taskId)); //TODO: it should not be O(n)
     }
 
     @Override
     public List<Task> getAllActiveTask(long userId) {
-        List<Task>  active = new ArrayList<>();
-        for (Map.Entry<Long, TaskData> pair : usersTasksMap.get(userId).entrySet()){
-            if (!pair.getValue().isSolved()) active.add(new Task(pair.getKey(),
-                    pair.getValue().getTitle(),
-                    pair.getValue().getFullTaskText(),
-                    pair.getValue().isSolved()));
+
+        List<Long> userTaskIds = usersTasksMap.get(userId);
+        if (userTaskIds != null) {
+            return userTaskIds.stream().map(taskId -> getTaskById(taskId).get())
+                    .filter(....)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>(0);
         }
-        return active;
     }
 
     @Override

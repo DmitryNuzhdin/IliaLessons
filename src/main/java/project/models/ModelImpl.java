@@ -7,6 +7,7 @@ import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ModelImpl implements Model {
@@ -18,7 +19,9 @@ public class ModelImpl implements Model {
 
     @Override
     public User createUser(UserData user) throws UserExistsException {
-        if (dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
+        if (!dataStorage.getAllUsers().isEmpty()
+         && dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
+
         return dataStorage.addUser(user);
     }
 
@@ -30,13 +33,19 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public Task updateTask(long taskId) throws TaskNotFoundException {
+    public Task getTaskById(long taskId) throws TaskNotFoundException {
         if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
-        return dataStorage.updateTask(taskId);
+        return dataStorage.getTaskById(taskId).get();
     }
 
     @Override
-    public void deleteTask(long taskId) throws TaskNotFoundException {
+    public Task updateTask(long taskId, TaskData taskData) throws TaskNotFoundException {
+        if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
+        return dataStorage.updateTask(taskId, taskData);
+    }
+
+    @Override
+    public void deleteTask(long taskId) throws  TaskNotFoundException {
         if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
         dataStorage.deleteTask(taskId);
     }

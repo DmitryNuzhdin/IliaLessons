@@ -51,7 +51,7 @@ public class ConsoleIOService implements IOService {
                                 try {
                                 System.out.println("Введите id задачи которую хотите обновить: ");
                                 long id = Long.parseLong(bufferedReader.readLine().trim());
-                                model.updateTask(user.getId(), id);
+                                model.updateTask(id, model.getTaskById(id).solvedTask(true));
                                 System.out.println("Задача id: "+ id + " обновлена.");
                                 ex = true;
                                 } catch (NumberFormatException e ){

@@ -21,25 +21,31 @@ public class InMemoryDataStorage implements DataStorage {
 
 
     @Override
-    public Task addTask(long userId, TaskData task) {
+    public Task addTask(long userId, TaskData taskData) {
         countTask++;
-        taskList.put(countTask, task);
-        List<Long> usersTasks = usersTasksMap.computeIfAbsent(userId, k -> new ArrayList<>());
-        usersTasks.add(countTask);
-        return new Task(countTask, task.getTitle(), task.getFullTaskText(), task.isSolved());
+        taskList.put(countTask, new Task(userId, countTask, taskData.getTitle(), taskData.getFullTaskText(), taskData.isSolved()));
+        List<Long> userTasks = usersTasksMap.computeIfAbsent(userId, k -> new ArrayList<>());
+        userTasks.add(countTask);
+
+        return taskList.get(countTask);
+
     }
 
     @Override
-    public Task updateTask(long taskId) {
-        TaskData newTaskData = taskList.get(taskId).solvedTask(true);
-        taskList.put(taskId, newTaskData);
-        return new Task(taskId, newTaskData.getTitle(),
-                newTaskData.getFullTaskText(),
-                newTaskData.isSolved());
+    public Task updateTask(long taskId, TaskData taskData) {
+        Task oldTask = taskList.get(taskId);
+        Task newTask = new Task(oldTask.getUserId(),
+                oldTask.getId(),
+                taskData.getTitle(),
+                taskData.getFullTaskText(),
+                taskData.isSolved());
+        taskList.put(taskId, newTask);
+
+        return taskList.get(taskId);
     }
 
     @Override
-    public Optional<TaskData> getTaskById(long taskId)  {
+    public Optional<Task> getTaskById(long taskId)  {
         if (taskList.containsKey(taskId)) return Optional.of(taskList.get(taskId));
         return Optional.empty();
     }
@@ -52,40 +58,37 @@ public class InMemoryDataStorage implements DataStorage {
 
     @Override
     public List<Task> getAllActiveTask(long userId) {
-
-        List<Long> userTaskIds = usersTasksMap.get(userId);
-        if (userTaskIds != null) {
-            return userTaskIds.stream().map(taskId -> getTaskById(taskId).get())
-                    .filter(....)
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<>(0);
+        List<Task> allActiveTasksOfUser = new ArrayList<>();
+        for (Long ids : usersTasksMap.get(userId)){
+            if (!taskList.get(ids).isSolved()){
+                allActiveTasksOfUser.add(taskList.get(ids));
+            }
         }
+        return allActiveTasksOfUser;
     }
 
     @Override
     public List<Task> getAllTasks(long userId) {
-        List<Task> all = new ArrayList<>();
-        for (Map.Entry<Long, TaskData> pair : usersTasksMap.get(userId).entrySet()){
-            all.add(new Task(pair.getKey(),
-                    pair.getValue().getTitle(),
-                    pair.getValue().getFullTaskText(),
-                    pair.getValue().isSolved()));
+        List<Task> allTasksOfUser = new ArrayList<>();
+        for (Long ids : usersTasksMap.get(userId)){
+            allTasksOfUser.add(taskList.get(ids));
         }
-         return all;
+         return allTasksOfUser;
     }
 
     @Override
-    public User addUser(UserData user) {
+    public User addUser(UserData userData) {
         countUser++;
-        userList.put(countUser, user);
-        return new User(countUser, userList.get(countUser).getName(),userList.get(countUser).getSecondName());
+        userList.put(countUser, new User(countUser, userData.getName(), userData.getSecondName()));
+        return userList.get(countUser);
     }
 
     @Override
     public User updateUser(long userId, UserData userData) {
-        userList.put(userId, userData);
-        return new User(userId, userData.getName(), userData.getSecondName());
+        userList.put(userId, new User(userId,
+                userData.getName(),
+                userData.getSecondName()));
+        return userList.get(userId);
     }
 
     @Override
@@ -96,20 +99,16 @@ public class InMemoryDataStorage implements DataStorage {
     @Override
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
-        for (Map.Entry<Long, UserData> pair : userList.entrySet()){
-            allUsers.add(new User(pair.getKey(),
-                    pair.getValue().getName(),
-                    pair.getValue().getSecondName()));
+        for (Map.Entry<Long, User> pair : userList.entrySet()){
+            allUsers.add(pair.getValue());
         }
         return allUsers;
     }
 
 
     @Override
-    public Optional<UserData> getUser(long userId) {
-        if (!userList.isEmpty()){
-            if (userList.containsKey(userId)) return Optional.of(userList.get((userId)));
-        }
+    public Optional<User> getUser(long userId) {
+        if (userList.containsKey(userId)) return Optional.of(userList.get((userId)));
         return Optional.empty();
     }
 }

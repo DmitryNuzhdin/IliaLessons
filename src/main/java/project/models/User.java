@@ -6,52 +6,39 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class User {
-    private int id;
-    private String name;
-    private String secondName;
+public class User extends UserData{
+    private final long id;
 
-
-    public User(int id, String name, String secondName) {
+    public User(long id, String name, String secondName){
+        super(name, secondName);
         this.id = id;
-        this.name = name;
-        this.secondName = secondName;
     }
 
-    public int getId() {
+    public User updateId(long id){
+        return new User(id, getName(), getSecondName());
+    }
+
+    public long getId() {
         return id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
         User user = (User) o;
-        return id == user.id &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(secondName, user.secondName);
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, secondName);
+        return Objects.hash(super.hashCode(), id);
     }
 
     @Override
     public String toString() {
-        return "User:" + id +
-                ", name: " + name  +
-                ", secondName: " + secondName;
+        return "id: " + id + " " +
+                super.toString();
     }
-
-
 }

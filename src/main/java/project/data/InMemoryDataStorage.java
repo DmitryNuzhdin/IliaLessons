@@ -1,7 +1,6 @@
 package project.data;
 
 import org.springframework.stereotype.Component;
-import project.exceptions.UserNotFoundException;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -9,22 +8,27 @@ import project.models.UserData;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class InMemoryDataStorage implements DataStorage {
-    private static long countUser;
-    Map<Long, User> userList = new HashMap<>();
-    private static long countTask;
-    Map<Long, Task> taskList = new HashMap<>();
-    Map<Long, List<Long>> usersTasksMap = new HashMap<>();
-
-
+    private long countUser;
+    private Map<Long, User> userList = new HashMap<>();
+    private long countTask;
+    private Map<Long, Task> taskList = new HashMap<>();
+    private Map<Long, Set<Long>> usersTasksMap = new HashMap<>();
 
     @Override
     public Task addTask(long userId, TaskData taskData) {
         countTask++;
         taskList.put(countTask, new Task(userId, countTask, taskData.getTitle(), taskData.getFullTaskText(), taskData.isSolved()));
-        List<Long> userTasks = usersTasksMap.computeIfAbsent(userId, k -> new ArrayList<>());
+        Set<Long> userTasks = usersTasksMap.computeIfAbsent(userId, k -> new HashSet<>());
+//        Set<Long> userTasks = usersTasksMap.get(userId);
+//        if (userTasks == null) {
+//            userTasks = new HashSet<>();
+//            usersTasksMap.put(userId, userTasks);
+//        }
+
         userTasks.add(countTask);
 
         return taskList.get(countTask);
@@ -52,28 +56,37 @@ public class InMemoryDataStorage implements DataStorage {
 
     @Override
     public void deleteTask(long taskId) {
-       taskList.remove(taskId);
-       usersTasksMap.forEach((userIds, taskIds) -> taskIds.remove(taskId)); //TODO: it should not be O(n)
+       Task taskToRemove = taskList.remove(taskId);
+       if (taskToRemove != null) {
+           Set<Long> tasksOfUser = usersTasksMap.get(taskToRemove.getUserId());
+           if (tasksOfUser != null) tasksOfUser.remove(taskId);
+       }
     }
 
     @Override
     public List<Task> getAllActiveTask(long userId) {
-        List<Task> allActiveTasksOfUser = new ArrayList<>();
-        for (Long ids : usersTasksMap.get(userId)){
-            if (!taskList.get(ids).isSolved()){
-                allActiveTasksOfUser.add(taskList.get(ids));
-            }
-        }
-        return allActiveTasksOfUser;
+//        List<Task> allActiveTasksOfUser = new ArrayList<>();
+//        for (Long ids : usersTasksMap.get(userId)){
+//            if (!taskList.get(ids).isSolved()){
+//                allActiveTasksOfUser.add(taskList.get(ids));
+//            }
+//        }
+
+        return getAllTasks(userId, true);
+    }
+
+    private List<Task> getAllTasks(long userId, boolean onlyActive) {
+        Set<Long> userTaskIds = usersTasksMap.get(userId);
+        if (userTaskIds == null) return new ArrayList<>();
+        return userTaskIds.stream()
+                .flatMap(taskId -> getTaskById(taskId).map(t -> Stream.of(t)).orElseGet( () -> Stream.empty()))
+                .filter(task -> !task.isSolved() || (!onlyActive))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Task> getAllTasks(long userId) {
-        List<Task> allTasksOfUser = new ArrayList<>();
-        for (Long ids : usersTasksMap.get(userId)){
-            allTasksOfUser.add(taskList.get(ids));
-        }
-         return allTasksOfUser;
+        return getAllTasks(userId, false);
     }
 
     @Override
@@ -94,21 +107,18 @@ public class InMemoryDataStorage implements DataStorage {
     @Override
     public void deleteUser(long userId) {
         userList.remove(userId);
+        Set<Long> usersTasks = usersTasksMap.remove(userId);
+        if (usersTasks != null) usersTasks.forEach(taskId -> taskList.remove(taskId));
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> allUsers = new ArrayList<>();
-        for (Map.Entry<Long, User> pair : userList.entrySet()){
-            allUsers.add(pair.getValue());
-        }
-        return allUsers;
+        return new ArrayList<>(userList.values());
     }
 
 
     @Override
     public Optional<User> getUser(long userId) {
-        if (userList.containsKey(userId)) return Optional.of(userList.get((userId)));
-        return Optional.empty();
+        return Optional.ofNullable(userList.get(userId));
     }
 }

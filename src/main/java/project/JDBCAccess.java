@@ -7,9 +7,12 @@ package project;
 import java.sql.*;
 
 public class JDBCAccess {
+    public static final String DB_URL = "jdbc:h2:/home/ilia/home/IliaLessons/db/testDB";
+    public static final String DB_Driver = "org.h2.Driver";
+
     public static void main(String[] args){
         try {
-            Class.forName("org.h2.Driver");
+            Class.forName(DB_Driver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -17,10 +20,26 @@ public class JDBCAccess {
         Connection connection = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:h2:/home/ilia/home/IliaLessons");
+            connection = DriverManager.getConnection(DB_URL);
             Statement statement = connection.createStatement();
+           // statement.executeUpdate("create table test(id int)");
+            statement.executeUpdate("insert into test values(1)");
+            statement.executeUpdate("insert into test values(2)");
+            statement.executeUpdate("insert into test values(3)");
+            statement.executeUpdate("insert into test values(4)");
+            statement.executeUpdate("insert into test values(5)");
+            ResultSet resultSet = statement.executeQuery("select * from test");
+            while (resultSet.next()){
+                System.out.println(resultSet.getInt("id"));
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
     }

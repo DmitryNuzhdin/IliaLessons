@@ -6,6 +6,7 @@ import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +20,12 @@ public class ModelImpl implements Model {
 
     @Override
     public User createUser(UserData user) throws UserExistsException {
-        if (!dataStorage.getAllUsers().isEmpty()
-         && dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
-
+       // if (dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
         return dataStorage.addUser(user);
     }
 
     @Override
-    public Task createTask(long userId, TaskData task) throws UserNotFoundException {
+    public Task createTask(long userId, TaskData task) throws UserNotFoundException, SQLException {
         if (!dataStorage.getUser(userId).isPresent()) throw new UserNotFoundException();
         return dataStorage.addTask(userId, task);
 
@@ -48,6 +47,10 @@ public class ModelImpl implements Model {
     public void deleteTask(long taskId) throws  TaskNotFoundException {
         if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
         dataStorage.deleteTask(taskId);
+    }
+
+    public void deleteUser(long userId) throws UserNotFoundException{
+        dataStorage.deleteUser(userId);
     }
 
     @Override

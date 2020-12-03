@@ -8,6 +8,7 @@ import project.models.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 
 @Component
@@ -78,6 +79,22 @@ public class ConsoleIOService implements IOService {
                             System.out.println("Список всех задач");
                             model.getAllTasksOfUser(user.getId()).forEach(System.out::println);
                             break;
+                        case "delete":
+                            boolean x = false;
+                            while (!x){
+                                try {
+                                    System.out.println("Введите id клиента: ");
+                                    long id = Long.parseLong(bufferedReader.readLine().trim());
+                                    model.deleteUser(id);
+                                    System.out.println("Клиент id: "+ id + " удален.");
+                                    x = true;
+                                } catch (NumberFormatException e ){
+                                    System.err.println("Введите целое число");
+                                } /*catch (TaskNotFoundException e) {
+                                    System.err.println("Такой задачи не обнаружено");
+                                }*/
+                            }
+                            break;
                         case "help":
                             System.out.println("Если хотите создать задачу введите: create\n" +
                                     "Если хотите обновить задачу введите: update\n" +
@@ -90,7 +107,7 @@ public class ConsoleIOService implements IOService {
                             return;
                     }
                 }
-            } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException e) {
+            } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
         }

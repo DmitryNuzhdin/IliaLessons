@@ -220,6 +220,7 @@ public class JDBCDataStorage implements DataStorage {
             throwables.printStackTrace();
         }
 
+       // System.out.println(user.toString());
         if (user == null) return Optional.empty();
         else return Optional.of(user);
     }

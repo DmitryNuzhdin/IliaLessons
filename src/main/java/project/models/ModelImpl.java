@@ -20,7 +20,7 @@ public class ModelImpl implements Model {
 
     @Override
     public User createUser(UserData user) throws UserExistsException {
-       // if (dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
+        //if (dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
         return dataStorage.addUser(user);
     }
 
@@ -35,6 +35,12 @@ public class ModelImpl implements Model {
     public Task getTaskById(long taskId) throws TaskNotFoundException {
         if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
         return dataStorage.getTaskById(taskId).get();
+    }
+
+    @Override
+    public User getUserById(long userId) throws UserNotFoundException {
+        if (!dataStorage.getUser(userId).isPresent()) throw  new UserNotFoundException();
+        return dataStorage.getUser(userId).get();
     }
 
     @Override

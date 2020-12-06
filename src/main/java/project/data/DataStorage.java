@@ -5,6 +5,7 @@ import project.models.TaskData;
 import project.models.User;
 import project.models.UserData;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
  * @author Ilia Moskalenko
  */
 public interface DataStorage {
-    Task addTask(long userId, TaskData task);
+    Task addTask(long userId, TaskData task) throws SQLException;
     Task updateTask(long taskId, TaskData taskData);
     void deleteTask (long taskId);
     List<Task> getAllActiveTask(long userId);

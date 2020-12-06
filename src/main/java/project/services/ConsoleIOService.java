@@ -14,6 +14,9 @@ import java.sql.SQLException;
 
 @Component
 public class ConsoleIOService implements IOService {
+//    abstract void output(String s);
+//    abstract String readLine();
+
     private Model model;
     private Runnable runnable = new Runnable() {
         @Override
@@ -142,7 +145,7 @@ public class ConsoleIOService implements IOService {
                             return;
                     }
                 }
-            } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException | SQLException
+            } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException
                     e) {
                 e.printStackTrace();
             }

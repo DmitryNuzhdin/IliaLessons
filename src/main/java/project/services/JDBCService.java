@@ -40,8 +40,6 @@ public class JDBCService implements IOService {
 
             } catch (UserNotFoundException e) {
                 e.printStackTrace();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             } catch (UserExistsException e) {
                 e.printStackTrace();
             } catch (IOException e) {

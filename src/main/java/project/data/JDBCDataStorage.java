@@ -1,5 +1,7 @@
 package project.data;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -10,18 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class JDBCDataStorage implements DataStorage {
+    private Connection connection;
+    private final String dbPath;
 
-   private Connection getNewConnection() throws SQLException {
-        final String DB_URL = "jdbc:h2:/home/ilia/home/IliaLessons/db/testDB";
-        return DriverManager.getConnection(DB_URL);
+    @Autowired
+    public JDBCDataStorage() {
+        this("db url .....");
+    }
+
+    public JDBCDataStorage(String dbPath) {
+        this.dbPath = dbPath;
+    }
+
+    private Connection getConnection() throws SQLException {
+       if (connection == null) {
+           connection = DriverManager.getConnection(dbPath);
+       }
+
+       return connection;
    }
 
 
     @Override
-    public Task addTask(long userId, TaskData task) throws SQLException {
+    public Task addTask(long userId, TaskData task) {
         int taskId = 0;
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             String insert = String.format("INSERT INTO tasks (fk_user_id, title, full_task_text, is_solved) " +
                     "VALUES (%d, '%s', '%s', '%b')", userId, task.getTitle(), task.getFullTaskText(), task.isSolved());
            // System.out.println(insert);
@@ -43,7 +60,7 @@ public class JDBCDataStorage implements DataStorage {
         String update = String.format("UPDATE tasks " +
                 "SET title ='%s', full_task_text = '%s', is_solved = '%b' " +
                 "WHERE task_id = %d", taskData.getTitle(),taskData.getFullTaskText(), taskData.isSolved(), taskId);
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             statement.executeUpdate(update);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM tasks " +
                     "WHERE task_id = " + taskId);
@@ -63,7 +80,7 @@ public class JDBCDataStorage implements DataStorage {
 
     @Override
     public void deleteTask(long taskId) {
-       try (Statement statement = getNewConnection().createStatement()){
+       try (Statement statement = getConnection().createStatement()){
            statement.executeUpdate("DELETE FROM tasks " +
                    "WHERE task_id = " + taskId);
        } catch (SQLException throwables) {
@@ -75,7 +92,7 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public List<Task> getAllActiveTask(long userId) {
         List<Task> taskList = new ArrayList<>();
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             Task task;
             ResultSet resultSet = statement.executeQuery("SELECT * FROM tasks " +
                     "WHERE is_solved = 'false' AND fk_user_id = " + userId);
@@ -97,7 +114,7 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public List<Task> getAllTasks(long userId) {
         List<Task> taskList = new ArrayList<>();
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             Task task;
             ResultSet resultSet = statement.executeQuery("SELECT * FROM tasks " +
                     "WHERE fk_user_id = " + userId);
@@ -119,8 +136,8 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public User addUser(UserData user) {
         User newUser = null;
-       try(Connection connection = getNewConnection();
-       Statement statement = connection.createStatement()) {
+       try(Connection connection = getConnection();
+           Statement statement = connection.createStatement()) {
            statement.executeUpdate("INSERT INTO users (name, second_name) VALUES('"+user.getName()+"','"
                    + user.getSecondName()+"')");
            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
@@ -139,7 +156,7 @@ public class JDBCDataStorage implements DataStorage {
         String update = String.format("UPDATE users " +
                 "SET name ='%s', second_name = '%s' " +
                 "WHERE task_id = %d", userData.getName(),userData.getSecondName(), userId);
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             statement.executeUpdate(update);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users " +
                     "WHERE user_id = " + userId);
@@ -157,7 +174,7 @@ public class JDBCDataStorage implements DataStorage {
 
     @Override
     public void deleteUser(long userId) {
-       try (Statement statement = getNewConnection().createStatement()){
+       try (Statement statement = getConnection().createStatement()){
            statement.executeUpdate("DELETE FROM tasks " +
                    "WHERE fk_user_id = "+ userId);
            statement.executeUpdate("DELETE FROM users " +
@@ -170,7 +187,7 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             User user;
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
             while (resultSet.next()){
@@ -190,7 +207,7 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public Optional<Task> getTaskById(long taskId) {
        Task task = null;
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             ResultSet resultSet = statement.executeQuery("SELECT * FROM tasks WHERE task_id = " + taskId);
             while (resultSet.next())
                 task = new Task(resultSet.getInt(2),
@@ -209,7 +226,7 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public Optional<User> getUser(long userId) {
         User user = null;
-        try (Statement statement = getNewConnection().createStatement()){
+        try (Statement statement = getConnection().createStatement()){
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE user_id = " + userId);
             while (resultSet.next())
                 user = new User(resultSet.getInt(1),

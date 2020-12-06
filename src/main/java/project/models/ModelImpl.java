@@ -1,5 +1,8 @@
 package project.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import project.data.DataStorage;
 import project.exceptions.TaskNotFoundException;
@@ -8,24 +11,28 @@ import project.exceptions.UserNotFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
 public class ModelImpl implements Model {
     private DataStorage dataStorage;
 
-    public ModelImpl(DataStorage dataStorage) {
+    @Autowired
+    public ModelImpl(@Qualifier(value = "inMemoryDataStorage") DataStorage dataStorage) {
         this.dataStorage = dataStorage;
     }
 
     @Override
     public User createUser(UserData user) throws UserExistsException {
-        //if (dataStorage.getUser(dataStorage.addUser(user).getId()).isPresent()) throw new UserExistsException();
+        boolean userNameExists = dataStorage.getAllUsers().stream()
+                .anyMatch(user1 -> Objects.equals(user1.getName(), user.getName()));
+        if (userNameExists) throw new UserExistsException();
         return dataStorage.addUser(user);
     }
 
     @Override
-    public Task createTask(long userId, TaskData task) throws UserNotFoundException, SQLException {
+    public Task createTask(long userId, TaskData task) throws UserNotFoundException {
         if (!dataStorage.getUser(userId).isPresent()) throw new UserNotFoundException();
         return dataStorage.addTask(userId, task);
 

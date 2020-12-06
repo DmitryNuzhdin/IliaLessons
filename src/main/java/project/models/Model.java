@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public interface Model {
     User createUser(UserData user) throws UserExistsException;
-    Task createTask(long userId, TaskData task) throws UserNotFoundException, SQLException;
+    Task createTask(long userId, TaskData task) throws UserNotFoundException;
     Task getTaskById(long taskId) throws TaskNotFoundException;
     User getUserById(long userId) throws UserNotFoundException;
     Task updateTask(long userId, TaskData taskData) throws TaskNotFoundException;

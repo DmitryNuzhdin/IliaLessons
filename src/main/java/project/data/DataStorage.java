@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author Ilia Moskalenko
  */
 public interface DataStorage {
-    Task addTask(long userId, TaskData task) throws SQLException;
+    Task addTask(long userId, TaskData task);
     Task updateTask(long taskId, TaskData taskData);
     void deleteTask (long taskId);
     List<Task> getAllActiveTask(long userId);

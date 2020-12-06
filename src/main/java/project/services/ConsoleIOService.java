@@ -43,14 +43,13 @@ public class ConsoleIOService implements IOService {
                             System.out.println(user);
                             break;
                         case "login":
-                            boolean x = false;
-                            while (!x) {
+                            while (true) {
                                 try {
                                     System.out.println("Введите id для того чтобы залогиниться: ");
                                     long id = Long.parseLong(bufferedReader.readLine().trim());
                                     user = model.getUserById(id);
                                     System.out.println(user);
-                                    x = true;
+                                    break;
                                 } catch (NumberFormatException | IOException e) {
                                     System.err.println("Введите целое число");
                                 }
@@ -82,19 +81,18 @@ public class ConsoleIOService implements IOService {
                             System.out.println(task.toString());
                             break;
                         case "update":
-                            boolean ex = false;
-                            while (!ex) {
+                            while (true) {
                                 try {
                                     System.out.println("Введите id задачи которую хотите обновить: ");
                                     long id = Long.parseLong(bufferedReader.readLine().trim());
                                     model.updateTask(id, model.getTaskById(id).solvedTask(true));
                                     System.out.println("Задача id: " + id + " обновлена.");
-                                    ex = true;
+                                    break;
                                 } catch (NumberFormatException e) {
                                     System.err.println("Введите целое число");
-                                } /*catch (TaskNotFoundException e) {
+                                } catch (TaskNotFoundException e) {
                                     System.err.println("Такой задачи не обнаружено");
-                                }*/
+                                }
                             }
                             break;
                         case "active":

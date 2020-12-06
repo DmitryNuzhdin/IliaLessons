@@ -9,17 +9,16 @@ import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+
 
 @Component
 public class ModelImpl implements Model {
     private DataStorage dataStorage;
 
     @Autowired
-    public ModelImpl(@Qualifier(value = "inMemoryDataStorage") DataStorage dataStorage) {
+    public ModelImpl(@Qualifier(value = "JDBCDataStorage") DataStorage dataStorage) {
         this.dataStorage = dataStorage;
     }
 

@@ -19,7 +19,7 @@ public class JDBCDataStorage implements DataStorage {
 
     @Autowired
     public JDBCDataStorage() {
-        this("db url .....");
+        this("jdbc:h2:/home/ilia/home/IliaLessons/db/testDB");
     }
 
     public JDBCDataStorage(String dbPath) {
@@ -30,7 +30,6 @@ public class JDBCDataStorage implements DataStorage {
        if (connection == null) {
            connection = DriverManager.getConnection(dbPath);
        }
-
        return connection;
    }
 

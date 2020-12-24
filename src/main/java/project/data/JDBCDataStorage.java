@@ -40,7 +40,6 @@ public class JDBCDataStorage implements DataStorage {
         try (Statement statement = getConnection().createStatement()){
             String insert = String.format("INSERT INTO tasks (fk_user_id, title, full_task_text, is_solved) " +
                     "VALUES (%d, '%s', '%s', '%b')", userId, task.getTitle(), task.getFullTaskText(), task.isSolved());
-           // System.out.println(insert);
            statement.executeUpdate(insert);
            ResultSet resultSet = statement.executeQuery("SELECT task_id " +
                    "FROM tasks");
@@ -68,7 +67,7 @@ public class JDBCDataStorage implements DataStorage {
                         resultSet.getInt(1),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.absolute(5));
+                        resultSet.getBoolean(5));
             }
 
         } catch (SQLException throwables) {
@@ -135,14 +134,12 @@ public class JDBCDataStorage implements DataStorage {
     @Override
     public User addUser(UserData user) {
         User newUser = null;
-       try(Connection connection = getConnection();
-           Statement statement = connection.createStatement()) {
+       try(Statement statement = connection.createStatement()) {
            statement.executeUpdate("INSERT INTO users (name, second_name) VALUES('"+user.getName()+"','"
                    + user.getSecondName()+"')");
            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
            resultSet.last();
-           newUser = new User(resultSet.getInt(1),resultSet.getString(2), resultSet.getNString(3));
-
+           newUser = new User(resultSet.getInt(1),resultSet.getString(2), resultSet.getString(3));
        } catch (SQLException throwables) {
            throwables.printStackTrace();
        }
@@ -235,8 +232,6 @@ public class JDBCDataStorage implements DataStorage {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-       // System.out.println(user.toString());
         if (user == null) return Optional.empty();
         else return Optional.of(user);
     }

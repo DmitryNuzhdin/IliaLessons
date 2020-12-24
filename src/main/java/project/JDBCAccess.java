@@ -23,7 +23,7 @@ public class JDBCAccess {
             connection = DriverManager.getConnection(DB_URL);
             Statement statement = connection.createStatement();
            // statement.executeUpdate("create table test(id int)");
-            statement.executeUpdate("insert into test values(1)");
+          /*  statement.executeUpdate("insert into test values(1)");
             statement.executeUpdate("insert into test values(2)");
             statement.executeUpdate("insert into test values(3)");
             statement.executeUpdate("insert into test values(4)");
@@ -31,7 +31,8 @@ public class JDBCAccess {
             ResultSet resultSet = statement.executeQuery("select * from test");
             while (resultSet.next()){
                 System.out.println(resultSet.getInt("id"));
-            }
+            }*/
+           // statement.executeUpdate("CREATE DATA BASE testJUnit");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

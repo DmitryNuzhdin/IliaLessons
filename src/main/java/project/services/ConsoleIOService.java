@@ -1,15 +1,14 @@
 package project.services;
 
 import org.springframework.stereotype.Component;
-import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
 import project.models.*;
+import project.services.console.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 
 @Component
@@ -21,129 +20,52 @@ public class ConsoleIOService implements IOService {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             User user = null;
-            try {
-                while (user == null) {
-                    System.out.println("Введите \"help\" для списка команд");
-                    String s = bufferedReader.readLine();
-                    switch (s) {
-                        case "reg":
-                            String name;
-                            String secondName;
-                            do {
-                                System.out.println("Введите имя: ");
-                                name = bufferedReader.readLine();
-                            } while (name.trim().isEmpty());
-                            do {
-                                System.out.println("Введите фамилию: ");
-                                secondName = bufferedReader.readLine();
-                            } while (secondName.trim().isEmpty());
-                            user = model.createUser(new UserData(name, secondName));
-                            System.out.println(user);
-                            break;
-                        case "login":
-                            while (true) {
-                                try {
-                                    System.out.println("Введите id для того чтобы залогиниться: ");
-                                    long id = Long.parseLong(bufferedReader.readLine().trim());
-                                    user = model.getUserById(id);
-                                    System.out.println(user);
-                                    break;
-                                } catch (NumberFormatException | IOException e) {
-                                    System.err.println("Введите целое число");
-                                }
-                            }
-                            break;
-                        case "help":
-                            System.out.println("Если хотите зарегестрироваться введите: reg\n" +
-                                    "Если хотите залогиниться введите: login\n" +
-                                    "Если хотите выйти из программы введите: exit\n");
-                            break;
-                        case "exit":
-                            bufferedReader.close();
-                            return;
-                    }
-                }
+            ConsoleControl consoleControlForRegistrationOrLogin = new ConsoleControl();
+            RegistrationUserCommand registrationUserCommand = new RegistrationUserCommand(model,
+                    "Регистрация пользователя");
+            LoginUserCommand loginUserCommand = new LoginUserCommand(model, "Залогиниться");
+            ExitCommand exitCommand = new ExitCommand(model, "Выход");
+            consoleControlForRegistrationOrLogin.setCommand("reg", registrationUserCommand);
+            consoleControlForRegistrationOrLogin.setCommand("login", loginUserCommand);
+            consoleControlForRegistrationOrLogin.setCommand("exit", exitCommand);
 
-                while (true) {
-                    System.out.println("Введите \"help\" для списка команд");
-                    String s = bufferedReader.readLine();
 
-                    switch (s) {
-                        case "create":
-                            System.out.println("Введите название задачи: ");
-                            String title = bufferedReader.readLine().trim();
-                            System.out.println("Введите задачу целиком: ");
-                            String taskText = bufferedReader.readLine().trim();
-                            Task task = model.createTask(user.getId(), new TaskData(title, taskText, false));
-                            System.out.println("Создана задача: ");
-                            System.out.println(task.toString());
-                            break;
-                        case "update":
-                            while (true) {
-                                try {
-                                    System.out.println("Введите id задачи которую хотите обновить: ");
-                                    long id = Long.parseLong(bufferedReader.readLine().trim());
-                                    model.updateTask(id, model.getTaskById(id).solvedTask(true));
-                                    System.out.println("Задача id: " + id + " обновлена.");
-                                    break;
-                                } catch (NumberFormatException e) {
-                                    System.err.println("Введите целое число");
-                                } catch (TaskNotFoundException e) {
-                                    System.err.println("Такой задачи не обнаружено");
-                                }
-                            }
-                            break;
-                        case "active":
-                            if (model.getAllActiveTaskOfUser(user.getId()).isEmpty()) {
-                                System.out.println("Список активных задач пуст");
-                                break;
-                            }
-                            System.out.println("Список активных задач");
-                            model.getAllActiveTaskOfUser(user.getId()).forEach(System.out::println);
-                            break;
-                        case "all":
-                            if (model.getAllTasksOfUser(user.getId()).isEmpty()) {
-                                System.out.println("Список задач пуст");
-                                break;
-                            }
-                            System.out.println("Список всех задач");
-                            model.getAllTasksOfUser(user.getId()).forEach(System.out::println);
-                            break;
-                        case "remove":
-                            while (true) {
-                                try {
-                                    System.out.println("Введите id задачи которую хотите удалить: ");
-                                    long id = Long.parseLong(bufferedReader.readLine().trim());
-                                    model.deleteTask(id);
-                                    System.out.println("Задача id: " + id + " удалена.");
-                                    break;
-                                } catch (NumberFormatException e) {
-                                    System.err.println("Введите целое число");
-                                }
-                            }
-                            break;
-                        case "delete":
-                                    model.deleteUser(user.getId());
-                                    System.out.println("Пользователь " + user + " удален.");
-                                    bufferedReader.close();
-                                    return;
-                        case "help":
-                            System.out.println("Если хотите создать задачу введите: create\n" +
-                                    "Если хотите обновить задачу введите: update\n" +
-                                    "Если хотите просмотреть все активные задачи введите: active\n" +
-                                    "Если хотите просмотреть все таски введите: all\n" +
-                                    "Если хотите удалить профиль введите: delete\n" +
-                                    "Если хотете удалить задание введите: remove\n"+
-                                    "Если хотите выйти из программы введите: exit\n");
-                            break;
-                        case "exit":
-                            bufferedReader.close();
-                            return;
-                    }
+
+            System.out.println(consoleControlForRegistrationOrLogin.toStringForUserCommands());
+            try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))){
+                while (user == null && exitCommand.isConnect()) {
+                    System.out.println("Введите \"help\" для списка команд");
+                    user = consoleControlForRegistrationOrLogin.commandWasChosenForUser(bufferedReader);
                 }
-            } catch (IOException | UserExistsException | UserNotFoundException | TaskNotFoundException
+                if (!exitCommand.isConnect()) return;
+
+                ConsoleControl consoleControl = new ConsoleControl(user);
+                CreateTaskCommand createTaskCommand = new CreateTaskCommand(model, user, "Создать задачу");
+                UpdateTaskCommand updateTaskCommand = new UpdateTaskCommand(model, user, "Обновить задачу");
+                ListOfUnsolvedTasksCommand listOfUnsolvedTasksCommand = new ListOfUnsolvedTasksCommand(model, user,
+                        "Выдать список нерешенных задач");
+                ListOfUserTasksCommand listOfUserTasksCommand = new ListOfUserTasksCommand(model, user,
+                        "Выдать список всех задач");
+                RemoveTaskCommand removeTaskCommand = new RemoveTaskCommand(model, user, "Удалить задачу");
+                RemoveUserCommand removeUserCommand = new RemoveUserCommand(model, user, "Удалить ползователя");
+                ExitSessionCommand exitSessionCommand = new ExitSessionCommand(model, user, "Выход");
+
+                consoleControl.setCommand("create", createTaskCommand);
+                consoleControl.setCommand("update", updateTaskCommand);
+                consoleControl.setCommand("active", listOfUnsolvedTasksCommand);
+                consoleControl.setCommand("all", listOfUserTasksCommand);
+                consoleControl.setCommand("remove", removeTaskCommand);
+                consoleControl.setCommand("delete", removeUserCommand);
+                consoleControl.setCommand("exit", exitSessionCommand);
+
+
+                System.out.println(consoleControl.toString());
+                while (exitSessionCommand.isConnected()) {
+                    System.out.println("Введите \"help\" для списка команд");
+                    consoleControl.commandWasChosen(bufferedReader);
+                }
+            } catch (IOException | UserNotFoundException | UserExistsException
                     e) {
                 e.printStackTrace();
             }

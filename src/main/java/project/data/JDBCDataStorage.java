@@ -28,7 +28,9 @@ public class JDBCDataStorage implements DataStorage {
 
     private Connection getConnection() throws SQLException {
        if (connection == null) {
-           connection = DriverManager.getConnection(dbPath);
+          final String DB_USERNAME = "user";
+          final String DB_PASSWORD = "password";
+          connection = DriverManager.getConnection(dbPath, DB_USERNAME, DB_PASSWORD);
        }
        return connection;
    }

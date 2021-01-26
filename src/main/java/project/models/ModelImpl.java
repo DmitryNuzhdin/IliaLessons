@@ -2,7 +2,6 @@ package project.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import project.data.DataStorage;
 import project.exceptions.TaskNotFoundException;
@@ -61,6 +60,7 @@ public class ModelImpl implements Model {
         dataStorage.deleteTask(taskId);
     }
 
+    @Override
     public void deleteUser(long userId) throws UserNotFoundException{
         dataStorage.deleteUser(userId);
     }

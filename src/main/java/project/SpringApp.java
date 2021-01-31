@@ -1,10 +1,13 @@
 package project;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
 
 /**
  * @author Ilia Moskalenko
@@ -13,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = "project")
 @SpringBootApplication
 public class SpringApp {
+    private final static Logger log = LoggerFactory.getLogger(SpringApp.class);
+
     public static void main(String[] args) {
         SpringApplication.run(SpringApp.class);
         /*AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringApp.class);

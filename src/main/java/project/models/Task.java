@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class Task extends TaskData{
+public class Task extends TaskData {
     private final long id;
     private long userId;
 
@@ -16,7 +16,7 @@ public class Task extends TaskData{
         this.id = id;
     }
 
-    public Task updateId(long id){
+    public Task updateId(long id) {
         return new Task(userId, id, getTitle(), getFullTaskText(), isSolved());
     }
 
@@ -46,7 +46,7 @@ public class Task extends TaskData{
 
     @Override
     public String toString() {
-        return "User id: " + userId + "\nTask id: " + id +" " +
+        return "User id: " + userId + "\nTask id: " + id + " " +
                 super.toString();
     }
 

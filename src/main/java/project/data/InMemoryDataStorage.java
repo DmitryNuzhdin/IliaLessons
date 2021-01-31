@@ -49,18 +49,18 @@ public class InMemoryDataStorage implements DataStorage {
     }
 
     @Override
-    public Optional<Task> getTaskById(long taskId)  {
+    public Optional<Task> getTaskById(long taskId) {
         if (taskList.containsKey(taskId)) return Optional.of(taskList.get(taskId));
         return Optional.empty();
     }
 
     @Override
     public void deleteTask(long taskId) {
-       Task taskToRemove = taskList.remove(taskId);
-       if (taskToRemove != null) {
-           Set<Long> tasksOfUser = usersTasksMap.get(taskToRemove.getUserId());
-           if (tasksOfUser != null) tasksOfUser.remove(taskId);
-       }
+        Task taskToRemove = taskList.remove(taskId);
+        if (taskToRemove != null) {
+            Set<Long> tasksOfUser = usersTasksMap.get(taskToRemove.getUserId());
+            if (tasksOfUser != null) tasksOfUser.remove(taskId);
+        }
     }
 
     @Override
@@ -79,7 +79,7 @@ public class InMemoryDataStorage implements DataStorage {
         Set<Long> userTaskIds = usersTasksMap.get(userId);
         if (userTaskIds == null) return new ArrayList<>();
         return userTaskIds.stream()
-                .flatMap(taskId -> getTaskById(taskId).map(t -> Stream.of(t)).orElseGet( () -> Stream.empty()))
+                .flatMap(taskId -> getTaskById(taskId).map(t -> Stream.of(t)).orElseGet(() -> Stream.empty()))
                 .filter(task -> !task.isSolved() || (!onlyActive))
                 .collect(Collectors.toList());
     }

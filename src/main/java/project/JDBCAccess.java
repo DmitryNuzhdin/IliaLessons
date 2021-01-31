@@ -10,7 +10,7 @@ public class JDBCAccess {
     public static final String DB_URL = "jdbc:h2:/home/ilia/home/IliaLessons/db/testDB";
     public static final String DB_Driver = "org.h2.Driver";
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try {
             Class.forName(DB_Driver);
         } catch (ClassNotFoundException e) {
@@ -22,7 +22,7 @@ public class JDBCAccess {
         try {
             connection = DriverManager.getConnection(DB_URL);
             Statement statement = connection.createStatement();
-           // statement.executeUpdate("create table test(id int)");
+            // statement.executeUpdate("create table test(id int)");
           /*  statement.executeUpdate("insert into test values(1)");
             statement.executeUpdate("insert into test values(2)");
             statement.executeUpdate("insert into test values(3)");
@@ -32,7 +32,7 @@ public class JDBCAccess {
             while (resultSet.next()){
                 System.out.println(resultSet.getInt("id"));
             }*/
-           // statement.executeUpdate("CREATE DATA BASE testJUnit");
+            // statement.executeUpdate("CREATE DATA BASE testJUnit");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

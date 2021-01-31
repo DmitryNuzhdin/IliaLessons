@@ -44,7 +44,7 @@ public class ModelImpl implements Model {
 
     @Override
     public User getUserById(long userId) throws UserNotFoundException {
-        if (!dataStorage.getUser(userId).isPresent()) throw  new UserNotFoundException();
+        if (!dataStorage.getUser(userId).isPresent()) throw new UserNotFoundException();
         return dataStorage.getUser(userId).get();
     }
 
@@ -55,13 +55,13 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public void deleteTask(long taskId) throws  TaskNotFoundException {
+    public void deleteTask(long taskId) throws TaskNotFoundException {
         if (!dataStorage.getTaskById(taskId).isPresent()) throw new TaskNotFoundException();
         dataStorage.deleteTask(taskId);
     }
 
     @Override
-    public void deleteUser(long userId) throws UserNotFoundException{
+    public void deleteUser(long userId) throws UserNotFoundException {
         dataStorage.deleteUser(userId);
     }
 

@@ -15,7 +15,7 @@ public class UserData {
         this.secondName = secondName;
     }
 
-    public UserData update(String name, String secondName){
+    public UserData update(String name, String secondName) {
         return new UserData(name, secondName);
     }
 
@@ -43,7 +43,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "name: " + name  +
+        return "name: " + name +
                 ", secondName: " + secondName;
     }
 }

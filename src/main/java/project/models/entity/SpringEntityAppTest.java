@@ -19,16 +19,16 @@ public class SpringEntityAppTest {
     }
 
     @Bean
-    public CommandLineRunner demo(TaskRepo taskRepo, UserRepo userRepo){
+    public CommandLineRunner demo(TaskRepo taskRepo, UserRepo userRepo) {
         return args -> {
             log.info("START");
-            UserEntity userEntity = new UserEntity(new UserData("name2","second-name2"));
-            TaskEntity taskEntity1 = new TaskEntity(userEntity, new TaskData("t1","task1",false));
-            TaskEntity taskEntity2 = new TaskEntity(userEntity, new TaskData("t2","task2",false));
+            UserEntity userEntity = new UserEntity(new UserData("name2", "second-name2"));
+            TaskEntity taskEntity1 = new TaskEntity(userEntity, new TaskData("t1", "task1", false));
+            TaskEntity taskEntity2 = new TaskEntity(userEntity, new TaskData("t2", "task2", false));
 
             userRepo.save(userEntity);
             log.info("USER after save: " + userEntity.toString());
-            log.info("User id: " +userEntity.getUserId());
+            log.info("User id: " + userEntity.getUserId());
 
             taskRepo.save(taskEntity1);
             taskRepo.save(taskEntity2);

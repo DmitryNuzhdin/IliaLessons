@@ -17,7 +17,7 @@ public class TaskData {
         this.solved = solved;
     }
 
-    public TaskData solvedTask(boolean solved){
+    public TaskData solvedTask(boolean solved) {
         return new TaskData(title, fullTaskText, solved);
     }
 

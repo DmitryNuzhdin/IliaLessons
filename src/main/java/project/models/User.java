@@ -1,20 +1,19 @@
 package project.models;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
  * @author Ilia Moskalenko
  */
-public class User extends UserData{
+public class User extends UserData {
     private final long id;
 
-    public User(long id, String name, String secondName){
+    public User(long id, String name, String secondName) {
         super(name, secondName);
         this.id = id;
     }
 
-    public User updateId(long id){
+    public User updateId(long id) {
         return new User(id, getName(), getSecondName());
     }
 

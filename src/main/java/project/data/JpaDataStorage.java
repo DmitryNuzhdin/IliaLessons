@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class JpaDataStorage implements DataStorage{
+public class JpaDataStorage implements DataStorage {
     private static final Logger log = LoggerFactory.getLogger(JpaDataStorage.class);
     private UserRepo userRepo;
     private TaskRepo taskRepo;
@@ -35,7 +35,7 @@ public class JpaDataStorage implements DataStorage{
         UserEntity userEntity = userEntityOpt.get();
         TaskEntity taskEntity = new TaskEntity(userEntity, task);
         taskRepo.save(taskEntity);
-        return new Task( userEntity.getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
+        return new Task(userEntity.getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
     }
 
@@ -47,7 +47,7 @@ public class JpaDataStorage implements DataStorage{
         taskEntity.setFullTaskText(taskData.getFullTaskText());
         taskEntity.setSolved(taskData.isSolved());
         taskRepo.save(taskEntity);
-        return new Task( taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
+        return new Task(taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
     }
 
@@ -70,7 +70,7 @@ public class JpaDataStorage implements DataStorage{
     public List<Task> getAllTasks(long userId) {
         boolean active = true;
         List<Task> taskList = new ArrayList<>();
-        List<TaskEntity> taskEntityList = taskRepo.findUserIdAndIsSolved(userId,active);
+        List<TaskEntity> taskEntityList = taskRepo.findUserIdAndIsSolved(userId, active);
         taskEntityList.stream().map(taskEntity -> taskList.add(new Task(
                 taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
                 taskEntity.isSolved())));

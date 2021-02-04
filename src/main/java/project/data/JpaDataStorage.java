@@ -31,8 +31,7 @@ public class JpaDataStorage implements DataStorage {
 
     @Override
     public Task addTask(long userId, TaskData task) {
-        Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
-        TaskEntity taskEntity = new TaskEntity(userEntityOpt.get(), task);
+        TaskEntity taskEntity = new TaskEntity(userId, task);
         taskRepo.save(taskEntity);
         return new Task(userId, taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
@@ -46,7 +45,7 @@ public class JpaDataStorage implements DataStorage {
         taskEntity.setFullTaskText(taskData.getFullTaskText());
         taskEntity.setSolved(taskData.isSolved());
         taskRepo.save(taskEntity);
-        return new Task(taskEntity.getUserId().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
+        return new Task(taskEntity.getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
     }
 
@@ -57,25 +56,19 @@ public class JpaDataStorage implements DataStorage {
 
     @Override
     public List<Task> getAllActiveTask(long userId) {
-        Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
-        UserEntity userEntity = userEntityOpt.get();
         List<Task> taskList = new ArrayList<>();
-        boolean active = true;
-        List<TaskEntity> taskEntityList = taskRepo.findByUserIdAndIsSolved(
-                userEntity, active);
-        taskEntityList.stream().map(taskEntity -> taskList.add(new Task(
-                taskEntity.getUserId().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
+        boolean active = false;
+        taskRepo.findByUserIdAndIsSolved(
+                userId, active).forEach(taskEntity -> taskList.add(new Task(
+                taskEntity.getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
                 taskEntity.isSolved())));
         return taskList;
     }
 
     @Override
     public List<Task> getAllTasks(long userId) {
-        Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
-        UserEntity userEntity = userEntityOpt.get();
         List<Task> taskList = new ArrayList<>();
-        List<TaskEntity> taskEntityList = taskRepo.findByUserId(userEntity);
-        taskEntityList.stream().map(taskEntity -> taskList.add(new Task(
+        taskRepo.findByUserId(userId).forEach(taskEntity -> taskList.add(new Task(
                 userId, taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
                 taskEntity.isSolved())));
         return taskList;

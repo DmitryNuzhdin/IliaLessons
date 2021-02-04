@@ -9,8 +9,7 @@ import java.util.Optional;
 @Repository
 public interface TaskRepo extends CrudRepository<TaskEntity, Long> {
     Optional<TaskEntity> findById(long id);
-
-    List<TaskEntity> findByUserIdAndIsSolved(UserEntity userEntity, boolean solved);
-    List<TaskEntity> findByUserId(UserEntity userEntity);
+    List<TaskEntity> findByUserIdAndIsSolved(long userId, boolean solved);
+    List<TaskEntity> findByUserId(long userId);
 
 }

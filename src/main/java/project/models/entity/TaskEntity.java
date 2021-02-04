@@ -26,11 +26,15 @@ public class TaskEntity implements Serializable {
     private long taskId;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_USER_ID",
             nullable = false,
-            referencedColumnName = "USER_ID")
-    private UserEntity userId;
+            referencedColumnName = "USER_ID")*/
+    @Column(
+            name = "USER_ID",
+            nullable = false
+    )
+    private long userId;
 
     @Column(
             name = "TITLE",
@@ -51,7 +55,7 @@ public class TaskEntity implements Serializable {
     public TaskEntity() {
     }
 
-    public TaskEntity(UserEntity userId, TaskData task) {
+    public TaskEntity(long userId, TaskData task) {
         this.userId = userId;
         this.title = task.getTitle();
         this.fullTaskText = task.getFullTaskText();
@@ -59,11 +63,11 @@ public class TaskEntity implements Serializable {
     }
 
 
-    public UserEntity getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(UserEntity userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

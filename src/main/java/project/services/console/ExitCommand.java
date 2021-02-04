@@ -22,6 +22,7 @@ public class ExitCommand implements CommandForLogin{
         isConnect = true;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

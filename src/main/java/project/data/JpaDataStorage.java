@@ -20,8 +20,8 @@ import java.util.Optional;
 @Component
 public class JpaDataStorage implements DataStorage {
     private static final Logger log = LoggerFactory.getLogger(JpaDataStorage.class);
-    private UserRepo userRepo;
-    private TaskRepo taskRepo;
+    private final UserRepo userRepo;
+    private final TaskRepo taskRepo;
 
     @Autowired
     public JpaDataStorage(UserRepo userRepo, TaskRepo taskRepo) {
@@ -32,10 +32,9 @@ public class JpaDataStorage implements DataStorage {
     @Override
     public Task addTask(long userId, TaskData task) {
         Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
-        UserEntity userEntity = userEntityOpt.get();
-        TaskEntity taskEntity = new TaskEntity(userEntity, task);
+        TaskEntity taskEntity = new TaskEntity(userEntityOpt.get(), task);
         taskRepo.save(taskEntity);
-        return new Task(userEntity.getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
+        return new Task(userId, taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
     }
 
@@ -47,7 +46,7 @@ public class JpaDataStorage implements DataStorage {
         taskEntity.setFullTaskText(taskData.getFullTaskText());
         taskEntity.setSolved(taskData.isSolved());
         taskRepo.save(taskEntity);
-        return new Task(taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
+        return new Task(taskEntity.getUserId().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(),
                 taskEntity.getFullTaskText(), taskEntity.isSolved());
     }
 
@@ -58,21 +57,26 @@ public class JpaDataStorage implements DataStorage {
 
     @Override
     public List<Task> getAllActiveTask(long userId) {
+        Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
+        UserEntity userEntity = userEntityOpt.get();
         List<Task> taskList = new ArrayList<>();
-        List<TaskEntity> taskEntityList = (List<TaskEntity>) taskRepo.findAll();
+        boolean active = true;
+        List<TaskEntity> taskEntityList = taskRepo.findByUserIdAndIsSolved(
+                userEntity, active);
         taskEntityList.stream().map(taskEntity -> taskList.add(new Task(
-                taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
+                taskEntity.getUserId().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
                 taskEntity.isSolved())));
         return taskList;
     }
 
     @Override
     public List<Task> getAllTasks(long userId) {
-        boolean active = true;
+        Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
+        UserEntity userEntity = userEntityOpt.get();
         List<Task> taskList = new ArrayList<>();
-        List<TaskEntity> taskEntityList = taskRepo.findUserIdAndIsSolved(userId, active);
+        List<TaskEntity> taskEntityList = taskRepo.findByUserId(userEntity);
         taskEntityList.stream().map(taskEntity -> taskList.add(new Task(
-                taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
+                userId, taskEntity.getTaskId(), taskEntity.getTitle(), taskEntity.getFullTaskText(),
                 taskEntity.isSolved())));
         return taskList;
     }
@@ -87,10 +91,9 @@ public class JpaDataStorage implements DataStorage {
     @Override
     public User updateUser(long userId, UserData userData) {
         Optional<UserEntity> userEntityOpt = userRepo.findById(userId);
-        UserEntity userEntity = userEntityOpt.get();
-        userEntity.setName(userData.getName());
-        userEntity.setSecondName(userData.getSecondName());
-        return new User(userEntity.getUserId(), userEntity.getName(), userEntity.getSecondName());
+        userEntityOpt.get().setName(userData.getName());
+        userEntityOpt.get().setSecondName(userData.getSecondName());
+        return new User(userId, userEntityOpt.get().getName(), userEntityOpt.get().getSecondName());
     }
 
     @Override
@@ -112,7 +115,7 @@ public class JpaDataStorage implements DataStorage {
         Optional<TaskEntity> taskEntityOpt = taskRepo.findById(taskId);
         TaskEntity taskEntity = taskEntityOpt.get();
 
-        return Optional.of(new Task(taskEntity.getUserEntity().getUserId(), taskEntity.getTaskId(),
+        return Optional.of(new Task(taskEntity.getTaskId(), taskEntity.getTaskId(),
                 taskEntity.getTitle(), taskEntity.getFullTaskText(), taskEntity.isSolved()));
     }
 

@@ -21,6 +21,7 @@ public class LoginUserCommand implements CommandForLogin {
         this.title = title;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

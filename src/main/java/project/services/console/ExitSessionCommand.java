@@ -23,6 +23,7 @@ public class ExitSessionCommand implements Command{
         isConnect = true;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

@@ -21,6 +21,7 @@ public class ListOfUserTasksCommand implements Command{
         this.title = title;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

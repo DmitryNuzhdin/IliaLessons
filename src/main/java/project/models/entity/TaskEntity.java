@@ -5,43 +5,66 @@ import project.models.TaskData;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "Task")
 @Table(name = "TASKS")
 public class TaskEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TASK_ID")
+    @SequenceGenerator(
+            name = "task_sequence",
+            sequenceName = "task_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "task_sequence"
+    )
+    @Column(
+            name = "TASK_ID",
+            updatable = false
+    )
     private long taskId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_USER_ID")
-    private UserEntity userEntity;
 
-    @Column(name = "TITLE")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_USER_ID",
+            nullable = false,
+            referencedColumnName = "USER_ID")
+    private UserEntity userId;
+
+    @Column(
+            name = "TITLE",
+            nullable = false
+    )
     private String title;
-    @Column(name = "FULL_TASK_TEXT")
+    @Column(
+            name = "FULL_TASK_TEXT",
+            nullable = false
+    )
     private String fullTaskText;
-    @Column(name = "iS_SOLVED")
+    @Column(
+            name = "iS_SOLVED",
+            nullable = false
+    )
     private boolean isSolved;
 
     public TaskEntity() {
     }
 
-    public TaskEntity(UserEntity user, TaskData task) {
-        this.userEntity = user;
+    public TaskEntity(UserEntity userId, TaskData task) {
+        this.userId = userId;
         this.title = task.getTitle();
         this.fullTaskText = task.getFullTaskText();
         this.isSolved = task.isSolved();
     }
 
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserEntity getUserId() {
+        return userId;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
     }
 
     public long getTaskId() {
@@ -82,7 +105,7 @@ public class TaskEntity implements Serializable {
     public String toString() {
         return "TaskEntity{" +
                 "taskId=" + taskId +
-                ", userId=" + userEntity.getUserId() +
+                ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", fullTaskText='" + fullTaskText + '\'' +
                 ", isSolved=" + isSolved +

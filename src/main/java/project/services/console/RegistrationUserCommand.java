@@ -21,6 +21,7 @@ public class RegistrationUserCommand  implements CommandForLogin{
 
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

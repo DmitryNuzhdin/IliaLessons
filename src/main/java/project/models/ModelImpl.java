@@ -17,7 +17,7 @@ public class ModelImpl implements Model {
     private DataStorage dataStorage;
 
     @Autowired
-    public ModelImpl(@Qualifier(value = "JDBCDataStorage") DataStorage dataStorage) {
+    public ModelImpl(@Qualifier(value = "jpaDataStorage") DataStorage dataStorage) {
         this.dataStorage = dataStorage;
     }
 

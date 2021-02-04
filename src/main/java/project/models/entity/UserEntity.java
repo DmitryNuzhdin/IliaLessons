@@ -4,19 +4,41 @@ import project.models.UserData;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
-@Entity
-@Table(name = "USERS")
+@Entity(name = "User")
+@Table(
+        name = "USERS",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "user_name_unique",
+                        columnNames = "NAME")
+        }
+)
 public class UserEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+    @Column(
+            name = "USER_ID",
+            updatable = false
+    )
     private long userId;
 
-    @Column(name = "NAME")
+    @Column(
+            name = "NAME",
+            nullable = false
+    )
     private String name;
-    @Column(name = "SECOND_NAME")
+    @Column(
+            name = "SECOND_NAME",
+            nullable = false
+    )
     private String secondName;
 
     public UserEntity() {
@@ -27,8 +49,8 @@ public class UserEntity implements Serializable {
         this.secondName = user.getSecondName();
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity")
-    private List<TaskEntity> taskList;
+  /*  @OneToMany(fetch = FetchType.EAGER, mappedBy = "userEntity")
+    private List<TaskEntity> taskList;*/
 
     public long getUserId() {
         return userId;
@@ -54,13 +76,13 @@ public class UserEntity implements Serializable {
         this.secondName = secondName;
     }
 
-    public List<TaskEntity> getTaskList() {
+/*    public List<TaskEntity> getTaskList() {
         return taskList;
     }
 
     public void setTaskList(List<TaskEntity> taskList) {
         this.taskList = taskList;
-    }
+    }*/
 
     @Override
     public String toString() {

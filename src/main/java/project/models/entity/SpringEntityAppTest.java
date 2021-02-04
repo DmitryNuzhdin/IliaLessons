@@ -1,3 +1,4 @@
+/*
 package project.models.entity;
 
 
@@ -40,3 +41,4 @@ public class SpringEntityAppTest {
         };
     }
 }
+*/

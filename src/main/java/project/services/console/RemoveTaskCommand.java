@@ -22,6 +22,7 @@ public class RemoveTaskCommand implements Command{
         this.title = title;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

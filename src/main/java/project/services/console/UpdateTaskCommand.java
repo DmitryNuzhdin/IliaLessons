@@ -2,7 +2,6 @@ package project.services.console;
 
 import project.exceptions.TaskNotFoundException;
 import project.models.Model;
-import project.models.Task;
 import project.models.User;
 
 import java.io.BufferedReader;
@@ -22,6 +21,7 @@ public class UpdateTaskCommand implements Command {
         this.title = title;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

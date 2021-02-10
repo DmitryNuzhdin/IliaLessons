@@ -1,7 +1,6 @@
 package project.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import project.data.DataStorage;
 import project.exceptions.TaskNotFoundException;
@@ -17,7 +16,7 @@ public class ModelImpl implements Model {
     private DataStorage dataStorage;
 
     @Autowired
-    public ModelImpl(@Qualifier(value = "jpaDataStorage") DataStorage dataStorage) {
+    public ModelImpl(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
     }
 

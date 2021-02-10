@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import project.config.DataStorageProperties;
 import project.exceptions.TaskNotFoundException;
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
@@ -22,6 +23,13 @@ public class AppController {
     private UserService userService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private DataStorageProperties dataStorageProperties;
+
+    @GetMapping("/data_storage")
+    String getActiveDataStorage(){
+        return dataStorageProperties.getActive().name();
+    }
 
     @PostMapping(value = "/user")
     User createUser(@RequestBody UserData user) throws UserExistsException {

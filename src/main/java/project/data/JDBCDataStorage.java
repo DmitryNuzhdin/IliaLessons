@@ -1,7 +1,5 @@
 package project.data;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -12,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+
 public class JDBCDataStorage implements DataStorage {
     private Connection connection;
     private final String dbPath;
 
-    @Autowired
+
     public JDBCDataStorage() {
         this("jdbc:h2:/home/ilia/home/IliaLessons/db/testDB");
     }

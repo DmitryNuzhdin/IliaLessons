@@ -2,8 +2,6 @@ package project.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import project.models.Task;
 import project.models.TaskData;
 import project.models.User;
@@ -17,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+
 public class JpaDataStorage implements DataStorage {
     private static final Logger log = LoggerFactory.getLogger(JpaDataStorage.class);
     private final UserRepo userRepo;
     private final TaskRepo taskRepo;
 
-    @Autowired
+
     public JpaDataStorage(UserRepo userRepo, TaskRepo taskRepo) {
         this.userRepo = userRepo;
         this.taskRepo = taskRepo;

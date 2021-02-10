@@ -6,15 +6,19 @@ import java.util.Objects;
  * @author Ilia Moskalenko
  */
 public class TaskData {
-    private final String title;
-    private final String fullTaskText;
-    private final boolean solved;
+    private  String title;
+    private  String fullTaskText;
+    private  boolean solved;
+
 
 
     public TaskData(String title, String fullTaskText, boolean solved) {
         this.title = title;
         this.fullTaskText = fullTaskText;
         this.solved = solved;
+    }
+
+    TaskData() {
     }
 
     public TaskData solvedTask(boolean solved) {

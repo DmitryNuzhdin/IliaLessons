@@ -5,23 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import project.services.IOService;
 
 
-@Configuration
+/*@Configuration
 @ComponentScan(basePackages = "project")
 @EnableJpaRepositories(basePackages = "project/models/entity")
-@EntityScan("project/models/entity")
+@EntityScan("project/models/entity")*/
 @SpringBootApplication
 public class SpringApp {
     private final static Logger log = LoggerFactory.getLogger(SpringApp.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringApp.class).getBean(IOService.class).start();
+        SpringApplication.run(SpringApp.class);
         /*AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringApp.class);
         context.getBean(IOService.class).start();*/
 

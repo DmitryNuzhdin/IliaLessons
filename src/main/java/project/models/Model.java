@@ -18,7 +18,7 @@ public interface Model {
 
     User getUserById(long userId) throws UserNotFoundException;
 
-    Task updateTask(long userId, TaskData taskData) throws TaskNotFoundException;
+    Task updateTask(long taskId, TaskData taskData) throws TaskNotFoundException;
 
     void deleteTask(long taskId) throws TaskNotFoundException;
 

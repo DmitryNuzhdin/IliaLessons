@@ -7,12 +7,15 @@ import java.util.Objects;
  */
 public class UserData {
 
-    private final String name;
-    private final String secondName;
+    private  String name;
+    private  String secondName;
 
     public UserData(String name, String secondName) {
         this.name = name;
         this.secondName = secondName;
+    }
+
+    UserData() {
     }
 
     public UserData update(String name, String secondName) {
@@ -26,6 +29,8 @@ public class UserData {
     public String getSecondName() {
         return secondName;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

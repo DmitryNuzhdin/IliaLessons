@@ -1,0 +1,34 @@
+// Запись юзера
+curl -H 'Content-Type: application/json' -X POST -i http://localhost:8080/api/user --data '{
+"name": "You",
+"secondName": "fucking fuck"
+}'
+
+
+// Запись таски
+curl -H 'Content-Type: application/json' -X POST -i http://localhost:8080/api/user/1/task --data '{
+"title": "Next Task",
+"fullTaskText": "fucking fuck, you fuck yourself",
+"solved": "false"
+}'
+
+// Обновить таску
+curl -H 'Content-Type: application/json' -X PUT -i http://localhost:8080/api/task/3 --data '{
+"title": "task3",
+"fullTaskText": "updated task3",
+"solved": "true"
+}'
+
+// Удалить таску
+curl -X DELETE http://localhost:8080/api/task/1
+// Получить таску
+curl -X GET http://localhost:8080/api/task/1
+//Получить юзера
+curl -X GET http://localhost:8080/api/user/1
+//Удалить юзера
+curl -X DELETE http://localhost:8080/api/user/1
+// Получить все таски
+curl -X GET http://localhost:8080/api/user/1/tasks
+// Получить все нерешенные
+curl -X GET http://localhost:8080/api/user/1/tasks/active
+

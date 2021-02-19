@@ -55,7 +55,7 @@ public class AppController {
 
     @PutMapping(value = "/task/{taskId}")
     Task updateTask(@PathVariable(value = "taskId") Long taskId,
-                    @RequestBody TaskData taskData) throws TaskNotFoundException {
+                    @RequestBody TaskData taskData) throws Exception {
         return taskService.updateTask(taskId, taskData);
     }
 
@@ -65,7 +65,7 @@ public class AppController {
     }
 
     @DeleteMapping(value = "user/{id}")
-    void deleteUser(@PathVariable(value = "id") Long userId) throws UserNotFoundException {
+    void deleteUser(@PathVariable(value = "id") Long userId) throws Exception {
         userService.deleteUser(userId);
     }
 

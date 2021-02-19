@@ -1,11 +1,9 @@
 package project.services.console;
 
-import project.exceptions.UserNotFoundException;
 import project.models.Model;
 import project.models.User;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 
 /**
@@ -28,7 +26,7 @@ public class RemoveUserCommand implements Command{
     }
 
     @Override
-    public void execute(BufferedReader bufferedReader, User user) throws IOException, UserNotFoundException {
+    public void execute(BufferedReader bufferedReader, User user) throws Exception {
         System.out.println("Вы цверены что хотите удалить потльзователя "+ user.toString()+"\n" +
                 "Если уверенны, введите: y");
         String s = bufferedReader.readLine();

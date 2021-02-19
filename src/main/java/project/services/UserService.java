@@ -22,7 +22,7 @@ public class UserService {
         return model.getUserById(userId);
     }
 
-    public void deleteUser(long userId) throws UserNotFoundException {
+    public void deleteUser(long userId) throws Exception {
         model.deleteUser(userId);
     }
 

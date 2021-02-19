@@ -2,6 +2,7 @@ package project;
 
 import project.data.DataStorage;
 import project.data.JDBCDataStorage;
+import project.locks.LocksProvider;
 import project.models.Model;
 import project.models.ModelImpl;
 import project.services.IOService;
@@ -10,7 +11,8 @@ import project.services.ConsoleIOService;
 public class Application {
     public static void main(String[] args) {
         DataStorage dataStorage = new JDBCDataStorage();
-        Model model = new ModelImpl(dataStorage);
+        LocksProvider locksProvider = new LocksProvider();
+        Model model = new ModelImpl(dataStorage, locksProvider);
         IOService ioService = new ConsoleIOService(model);
         //   IOService ioService2 = new ConsoleIOService(model);
 

@@ -23,12 +23,16 @@ public class TaskService {
         return model.getTaskById(taskId);
     }
 
-    public Task updateTask(long taskId, TaskData taskData) throws TaskNotFoundException {
+    public Task updateTask(long taskId, TaskData taskData) throws Exception {
         return model.updateTask(taskId, taskData);
     }
 
     public void deleteTask(long taskId) throws TaskNotFoundException {
-        model.deleteTask(taskId);
+        try {
+            model.deleteTask(taskId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Task> getAllTasksOfUser(long userId) throws UserNotFoundException {

@@ -40,6 +40,8 @@ public class RemoveTaskCommand implements Command{
                 System.err.println("Введите целое число");
             } catch (TaskNotFoundException e ){
                 System.err.println("Задачи с таким id не существует");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

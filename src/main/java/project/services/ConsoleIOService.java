@@ -68,6 +68,8 @@ public class ConsoleIOService implements IOService {
             } catch (IOException | UserNotFoundException | UserExistsException
                     e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };

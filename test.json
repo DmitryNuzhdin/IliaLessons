@@ -13,10 +13,16 @@ curl -H 'Content-Type: application/json' -X POST -i http://localhost:8080/api/us
 }'
 
 // Обновить таску
-curl -H 'Content-Type: application/json' -X PUT -i http://localhost:8080/api/task/3 --data '{
+curl -H 'Content-Type: application/json' -X PUT -i http://localhost:8080/api/task/9 --data '{
 "title": "task3",
 "fullTaskText": "updated task3",
 "solved": "true"
+}'
+
+curl -H 'Content-Type: application/json' -X PUT -i http://localhost:8080/api/task/3 --data '{
+"title": "task5",
+"fullTaskText": "updated task5",
+"solved": "false"
 }'
 
 // Удалить таску

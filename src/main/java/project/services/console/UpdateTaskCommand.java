@@ -40,6 +40,8 @@ public class UpdateTaskCommand implements Command {
                 System.err.println("Введите целое число");
             } catch (TaskNotFoundException e) {
                 System.err.println("Такой задачи не обнаружено");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

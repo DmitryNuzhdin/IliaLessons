@@ -4,13 +4,11 @@ package project.services.console;
 
 import project.exceptions.UserExistsException;
 import project.exceptions.UserNotFoundException;
-import project.models.Model;
 import project.models.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -38,7 +36,7 @@ public class ConsoleControl {
         commandForLoginMap.put(commandName, commandForLogin);
     }
 
-    public void commandWasChosen(BufferedReader bufferedReader) throws IOException, UserNotFoundException {
+    public void commandWasChosen(BufferedReader bufferedReader) throws Exception {
         String commandName = bufferedReader.readLine().toLowerCase().trim();
         if (commandMap.containsKey(commandName))
         commandMap.get(commandName).execute(bufferedReader, user);

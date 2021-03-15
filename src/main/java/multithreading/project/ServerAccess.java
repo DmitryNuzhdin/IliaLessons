@@ -1,42 +1,77 @@
 package multithreading.project;
 
+import multithreading.project.message.ClientMessage;
+import multithreading.project.message.ConnectToServer;
+import multithreading.project.message.UpdateParameter;
+
 import java.io.*;
+
 import java.net.Socket;
 
-public class ServerAccess extends Thread{
+public class ServerAccess implements Runnable{
     private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
+    private String name;
+
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
+
+
 
     public ServerAccess(Socket socket) throws IOException {
         this.socket = socket;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out =  new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        start();
     }
 
     @Override
     public void run(){
-        String word;
-        while (true){
-            try {
-                word = in.readLine();
-                if (word.equalsIgnoreCase("stop")) break;
-                for (ServerAccess serverAccess : Server.list){
-                    serverAccess.send(word);
+        try {
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+
+            while (true){
+                Object o = objectInputStream.readObject();
+
+                if (o instanceof ClientMessage) {
+                    ClientMessage cm = (ClientMessage) o;
+
+                    if (cm instanceof ConnectToServer) {
+                        String clientName = ((ConnectToServer) cm).id;
+
+                        name = clientName;
+
+                    } else if(cm instanceof UpdateParameter) {
+                        UpdateParameter up = (UpdateParameter) cm;
+                    }
+
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+
+
+
+                if (o instanceof String) {
+                    String s = (String) o;
+
+                    if (s.equalsIgnoreCase("stop")) break;
+
+                    Server.readWriteLock.readLock().lock();
+
+                    for (ServerAccess serverAccess : Server.list){
+                        serverAccess.send(s);
+                    }
+
+                    Server.readWriteLock.readLock().unlock();
+
+                }
+
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     private synchronized void send(String msg){
        try {
-           out.write(msg+"\n");
-           out.flush();
+           objectOutputStream.writeObject(msg);
+           objectOutputStream.flush();
        } catch (IOException e) {
            e.printStackTrace();
        }

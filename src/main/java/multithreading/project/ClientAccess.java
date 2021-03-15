@@ -141,32 +141,32 @@ public class ClientAccess {
 
         @Override
         public void run() {
-            while (isOpen) {
-                String word;
-                try {
-                    word = reader.readLine();
-                    switch (word.toLowerCase().trim()) {
-                        case "stop":
-                            isOpen = false;
-                            out.write("Stop!\n");
-                            ClientAccess.this.downService();
-                            break;
-                        case "update":
-                            updateParameter(getKey(), getValue());
-                            out.write(data);
-                            break;
-                        case "all":
-                            updateAllParameters(updateData());
-                            out.write(data);
-                            break;
-                        default:
-                            System.out.println("Unknown command");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
+//            while (isOpen) {
+//                String word;
+//                try {
+//                    word = reader.readLine();
+//                    switch (word.toLowerCase().trim()) {
+//                        case "stop":
+//                            isOpen = false;
+//                            out.write("Stop!\n");
+//                            ClientAccess.this.downService();
+//                            break;
+//                        case "update":
+//                            updateParameter(getKey(), getValue());
+//                            out.write(data);
+//                            break;
+//                        case "all":
+//                            updateAllParameters(updateData());
+//                            out.write(data);
+//                            break;
+//                        default:
+//                            System.out.println("Unknown command");
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
         }
     }
 
@@ -182,7 +182,7 @@ public class ClientAccess {
                         ClientAccess.this.downService();
                         break;
                     } else {
-                        out.write(data);
+//                        out.write(data);
                     }
                     out.flush();
                 } catch (IOException e) {

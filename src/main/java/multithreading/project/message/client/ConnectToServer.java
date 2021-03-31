@@ -1,6 +1,6 @@
-package multithreading.project.message;
+package multithreading.project.message.client;
 
-import java.io.Serializable;
+import multithreading.project.message.ClientMessage;
 
 public class ConnectToServer implements ClientMessage {
     public final String id;

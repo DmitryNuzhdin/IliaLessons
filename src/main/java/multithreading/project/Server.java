@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -17,7 +18,7 @@ public class Server {
     public static List<ServerAccess> list = new ArrayList<>();
     public static ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     public static ExecutorService executorService = Executors.newFixedThreadPool(50);
-    public static Map<String, ServerAccess> map;
+    public static Map<String, ServerAccess> map = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
 
@@ -25,7 +26,6 @@ public class Server {
             ServerSocket server = new ServerSocket(PORT);
             while (true) {
                 Socket socket = server.accept();
-                System.out.println("Клиент подключился");
                 try {
                     readWriteLock.writeLock().lock();
 

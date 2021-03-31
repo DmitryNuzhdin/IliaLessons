@@ -1,4 +1,6 @@
-package multithreading.project.message;
+package multithreading.project.message.client;
+
+import multithreading.project.message.ClientMessage;
 
 public class UpdateParameter implements ClientMessage {
     public final String key;

@@ -5,63 +5,49 @@ import java.util.Objects;
 /**
  * @author Ilia Moskalenko
  */
-public class Task{
-    private long id;
-    private String title;
-    private String fullTask;
-    private boolean solved;
+public class Task extends TaskData {
+    private final long id;
+    private long userId;
 
 
-
-    public Task(long id, String title, String fullTask) {
+    public Task(long userId, long id, String title, String fullTaskText, boolean solved) {
+        super(title, fullTaskText, solved);
+        this.userId = userId;
         this.id = id;
-        this.title = title;
-        this.fullTask = fullTask;
-        solved = false;
     }
+
+    public Task updateId(long id) {
+        return new Task(userId, id, getTitle(), getFullTaskText(), isSolved());
+    }
+
 
     public long getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getFullTask() {
-        return fullTask;
-    }
-
-    public boolean isSolved() {
-        return solved;
-    }
-
-    public void setSolved(boolean solved) {
-        this.solved = solved;
+    public long getUserId() {
+        return userId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
+        if (!super.equals(o)) return false;
         Task task = (Task) o;
         return id == task.id &&
-                solved == task.solved &&
-                Objects.equals(title, task.title) &&
-                Objects.equals(fullTask, task.fullTask);
+                userId == task.userId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, fullTask, solved);
+        return Objects.hash(super.hashCode(), id, userId);
     }
 
     @Override
     public String toString() {
-        return "id:" + id +
-                ", title: " + title +
-                ", solved=" + solved;
+        return "User id: " + userId + "\nTask id: " + id + " " +
+                super.toString();
     }
-
 
 }
